@@ -101,6 +101,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""MouseLook"",
+                    ""type"": ""Value"",
+                    ""id"": ""95bde587-afa9-47e4-aaa4-4f6fa41271c1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""6b444451-8a00-4d00-a97e-f47457f736a8"",
@@ -122,7 +131,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
@@ -168,6 +177,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c2d7892-eb74-485d-ad21-96ca9781d93f"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -313,17 +331,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone"",
-                    ""groups"": "";Keyboard&Mouse;Touch"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -556,6 +563,72 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb79d480-8f8b-4d3e-a064-0cee9f188fbe"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""12cff484-dc0e-4573-9655-2629b39b169e"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7fc2a58-fec8-4a94-a36a-0f46335b622d"",
+                    ""path"": ""<Mouse>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e831f167-8e82-402c-b6f9-ef8692e16e83"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0deda208-e9b9-4185-9da5-f8f546ed1a05"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14427d95-318b-42a8-9557-6981950f9057"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Keyboard"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1144,6 +1217,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_MouseLook = m_Player.FindAction("MouseLook", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
@@ -1152,6 +1226,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Keyboard = m_Player.FindAction("Keyboard", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1246,6 +1321,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_MouseLook;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Interact;
@@ -1254,6 +1330,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Previous;
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Keyboard;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1269,6 +1346,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/MouseLook".
+        /// </summary>
+        public InputAction @MouseLook => m_Wrapper.m_Player_MouseLook;
         /// <summary>
         /// Provides access to the underlying input action "Player/Look".
         /// </summary>
@@ -1302,6 +1383,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         /// <summary>
+        /// Provides access to the underlying input action "Player/Keyboard".
+        /// </summary>
+        public InputAction @Keyboard => m_Wrapper.m_Player_Keyboard;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1330,6 +1415,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @MouseLook.started += instance.OnMouseLook;
+            @MouseLook.performed += instance.OnMouseLook;
+            @MouseLook.canceled += instance.OnMouseLook;
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
@@ -1354,6 +1442,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Keyboard.started += instance.OnKeyboard;
+            @Keyboard.performed += instance.OnKeyboard;
+            @Keyboard.canceled += instance.OnKeyboard;
         }
 
         /// <summary>
@@ -1368,6 +1459,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @MouseLook.started -= instance.OnMouseLook;
+            @MouseLook.performed -= instance.OnMouseLook;
+            @MouseLook.canceled -= instance.OnMouseLook;
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
@@ -1392,6 +1486,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Keyboard.started -= instance.OnKeyboard;
+            @Keyboard.performed -= instance.OnKeyboard;
+            @Keyboard.canceled -= instance.OnKeyboard;
         }
 
         /// <summary>
@@ -1700,6 +1797,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "MouseLook" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMouseLook(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -1755,6 +1859,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Keyboard" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnKeyboard(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

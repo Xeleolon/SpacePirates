@@ -5,8 +5,12 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Awake & Input
     private InputSystem_Actions playerControls;
+
     private InputAction move;
+
     private InputAction look;
+    private InputAction mouseLook;
+    private InputAction keyboardActive;
 
     private void Awake()
     {
@@ -17,14 +21,23 @@ public class PlayerMovement : MonoBehaviour
     {
         move = playerControls.Player.Move;
         move.Enable();
+
         look = playerControls.Player.Look;
         look.Enable();
+        mouseLook = playerControls.Player.MouseLook;
+        mouseLook.Enable();
+        keyboardActive = playerControls.Player.Keyboard;
+        keyboardActive.Enable();
+        keyboardActive.performed += KeyboardSwitch;
     }
 
     private void OnDisable()
     {
         move.Disable();
+
         look.Disable();
+        mouseLook.Disable();
+        keyboardActive.Disable();
     }
 
     #endregion
@@ -34,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float speed = 5;
 
     Rigidbody2D rb;
-    public Camera cam;
+    public Camera cameraActive;
     
 
     private void Start()
@@ -46,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movementVar;
     Vector2 mousePos;
-    bool angleInputZero;
+    bool keyboardControl;
 
     void Update()
     {
@@ -54,16 +67,17 @@ public class PlayerMovement : MonoBehaviour
         movementVar = transform.right * movementInput.x + transform.up * movementInput.y;
         
         //look to mouse
-        Vector2 mouseLook = look.ReadValue<Vector2>();
-        if (mouseLook != Vector2.zero)
+        Vector2 mouseVector = look.ReadValue<Vector2>();
+       
+        if (mouseVector != Vector2.zero)
         {
-            mousePos = mouseLook;
-            angleInputZero = true;
-            { Debug.Log(mouseLook); }
+            keyboardControl = false;
+            mousePos = mouseVector;
         }
-        else
+        else if (keyboardControl)
         {
-            angleInputZero = false;
+            mouseVector = cameraActive.ScreenToWorldPoint(mouseLook.ReadValue<Vector2>());
+            mousePos = mouseVector;
         }
 
 
@@ -73,15 +87,25 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(rb.position + movementVar * speed * Time.fixedDeltaTime);
-
+        Vector2 lookDir;
 
         //look to mouse
-        if (angleInputZero)
+        if (!keyboardControl)
         {
-            Vector2 lookDir = mousePos;
-            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-
-            rb.rotation = angle;
+            lookDir = mousePos;
         }
+        else
+        {
+            lookDir = mousePos - rb.position;
+        }
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+
+        rb.rotation = angle;
+    }
+
+    private void KeyboardSwitch(InputAction.CallbackContext context)
+    {
+        keyboardControl = true;
+        Debug.Log("switch called");
     }
 }
