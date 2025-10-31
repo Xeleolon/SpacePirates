@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     #region Awake & Input
     private InputSystem_Actions playerControls;
     private InputAction move;
+    private InputAction look;
 
     private void Awake()
     {
@@ -16,42 +17,71 @@ public class PlayerMovement : MonoBehaviour
     {
         move = playerControls.Player.Move;
         move.Enable();
+        look = playerControls.Player.Look;
+        look.Enable();
     }
 
     private void OnDisable()
     {
         move.Disable();
+        look.Disable();
     }
 
     #endregion
 
     Vector3 movePoint;
     [Range (1,10)]
-    [SerializeField] float speed = 1;
+    [SerializeField] float speed = 5;
+
     Rigidbody2D rb;
-    Animator animator;
+    public Camera cam;
+    
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+
+        //cam.ScreenToWorldPoint(look);
     }
 
-
+    Vector2 movementVar;
+    Vector2 mousePos;
+    bool angleInputZero;
 
     void Update()
     {
-
-        Vector2 input = move.ReadValue<Vector2>();
-        //Vector2 movement;
-        //movement = input.normalized * speed * Time.deltaTime;
-        //transform.position += new Vector3(movement.x, movement.y, transform.position.z);
-        animator.SetFloat("Horizontal", input.x);
-        animator.SetFloat("Vertical", input.y);
-        animator.SetFloat("Speed", input.sqrMagnitude);
-        Debug.Log(input.sqrMagnitude);
-        rb.MovePosition(rb.position + input.normalized * speed * Time.fixedDeltaTime);
-
+        Vector2 movementInput = move.ReadValue<Vector2>();
+        movementVar = transform.right * movementInput.x + transform.up * movementInput.y;
         
+        //look to mouse
+        Vector2 mouseLook = look.ReadValue<Vector2>();
+        if (mouseLook != Vector2.zero)
+        {
+            mousePos = mouseLook;
+            angleInputZero = true;
+            { Debug.Log(mouseLook); }
+        }
+        else
+        {
+            angleInputZero = false;
+        }
+
+
+
+    }
+
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movementVar * speed * Time.fixedDeltaTime);
+
+
+        //look to mouse
+        if (angleInputZero)
+        {
+            Vector2 lookDir = mousePos;
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+
+            rb.rotation = angle;
+        }
     }
 }
