@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum movements { playerGravity, PlayerZeroG, Ship }
+
 public class PlayerMovement : MonoBehaviour
 {
     #region Awake & Input
@@ -15,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         playerControls = new InputSystem_Actions();
+
     }
 
     private void OnEnable()
@@ -42,9 +45,15 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    Vector3 movePoint;
+
+    [SerializeField] movements controlMovement = movements.playerGravity;
+
+
+    //Vector3 movePoint;
     [Range (1,10)]
-    [SerializeField] float speed = 5;
+    [SerializeField] float speedGravity = 5;
+    [SerializeField] float speedZeroG = 5;
+    [SerializeField] float speedShip = 5;
 
     Rigidbody2D rb;
     public Camera cameraActive;
@@ -68,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         
         //look to mouse
         Vector2 mouseVector = look.ReadValue<Vector2>();
-       
+
         if (mouseVector != Vector2.zero)
         {
             keyboardControl = false;
@@ -79,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
             mouseVector = cameraActive.ScreenToWorldPoint(mouseLook.ReadValue<Vector2>());
             mousePos = mouseVector;
         }
+        
 
 
 
@@ -86,26 +96,73 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movementVar * speed * Time.fixedDeltaTime);
-        Vector2 lookDir;
+
+        switch (controlMovement)
+        {
+            case movements.playerGravity:
+                PlayerGravityMovement();
+                PlayerRotation();
+            break;
+
+            case movements.PlayerZeroG:
+                PlayerZeroGMovement();
+                PlayerRotation();
+                PlayerZeroGMovement();
+            break;
+        }
+
+        void PlayerGravityMovement()
+        {
+            rb.MovePosition(rb.position + movementVar * speedGravity * Time.fixedDeltaTime);
+        }
+
+        void PlayerZeroGMovement()
+        {
+            rb.AddForce(movementVar * speedZeroG);
+        }
 
         //look to mouse
-        if (!keyboardControl)
+        void PlayerRotation()
         {
-            lookDir = mousePos;
-        }
-        else
-        {
-            lookDir = mousePos - rb.position;
-        }
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+            Vector2 lookDir;
+            if (!keyboardControl)
+            {
+                lookDir = mousePos;
+            }
+            else
+            {
+                lookDir = mousePos - rb.position;
+            }
+            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
 
-        rb.rotation = angle;
+            rb.rotation = angle;
+        }
+
+    }
+
+    public void SwitchMovement(movements movementType, GameObject controlObject)
+    {
+
+        switch (movementType)
+        {
+            case movements.playerGravity:
+                rb.linearVelocity = Vector3.zero;
+                controlMovement = movementType;
+            break;
+
+            case movements.PlayerZeroG:
+                controlMovement = movementType;
+            break;
+
+            case movements.Ship:
+
+            break;
+        }
     }
 
     private void KeyboardSwitch(InputAction.CallbackContext context)
     {
         keyboardControl = true;
-        Debug.Log("switch called");
+        //Debug.Log("switch called");
     }
 }
