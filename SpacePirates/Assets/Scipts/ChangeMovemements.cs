@@ -10,7 +10,11 @@ public class ChangeMovemements : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<PlayerMovement>().SwitchMovement(movementTypeEnter, ship);
+            Player player = other.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                player.SwitchMovement(movementTypeEnter, ship);
+            }
         }
     }
 
@@ -18,7 +22,11 @@ public class ChangeMovemements : MonoBehaviour
     {
         if (exit && other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<PlayerMovement>().SwitchMovement(movements.PlayerZeroG, ship);
+            Player player = other.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                player.SwitchMovement(movements.PlayerZeroG, ship);
+            }
         }
     }
 }
