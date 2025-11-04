@@ -141,6 +141,7 @@ public class Player : MonoBehaviour
         {
            if (shoot.ReadValue<float>() <= 0)
            {
+                grappleHead.SetParent(transform.parent);
                 toolInput = false;
                 grappleMovementOverride = false;
                 if (grappleState != weaponState.prepped)
@@ -297,6 +298,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
         grappleState = weaponState.prepped;
+        grappleHead.SetParent(transform.GetChild(0));
         yield return null;
 
     }
@@ -305,15 +307,14 @@ public class Player : MonoBehaviour
     {
         grappleState = weaponState.hit;
         grappleCollision.disableControl = false;
-        grappleHead.SetParent(transform.parent);
         while (Vector3.Distance(transform.position, grappleHead.position) > 0.1f)
         {
             transform.position = Vector3.MoveTowards(transform.position, grappleHead.position, (grappleReturnSpeed * Time.deltaTime));
             yield return null;
         }
-        grappleHead.SetParent(transform.GetChild(0));
         grappleMovementOverride = false;
         grappleState = weaponState.prepped;
+        grappleHead.SetParent(transform.GetChild(0));
         yield return null;
 
     }
@@ -323,6 +324,7 @@ public class Player : MonoBehaviour
         Debug.Log("grapple hit");
         //GameObject hit = other.GetComponent<OnCollision>().lastHit;
         StartCoroutine(HitMoveGrapple());
+        rb.linearVelocity = Vector3.zero;
     }
     #endregion
 }

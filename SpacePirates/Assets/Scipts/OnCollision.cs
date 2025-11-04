@@ -21,57 +21,58 @@ public class OnCollision : MonoBehaviour
     [SerializeField] bool exitTrigger = false;
 
     [HideInInspector] public GameObject lastHit;
-    void OnCollision2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("collison detected point 1");
+        Debug.Log("on collison detected point 1");
         if (onCollision)
         {
             Debug.Log("collison detected point 2");
-            Collision(other.gameObject);
+            CollisionOccured(other.gameObject);
         }
     }
 
-    void StayCollision2D(Collider2D other)
+    void OnCollisionStay2D(Collision2D other)
     {
         if (stayCollision)
         {
-            Collision(other.gameObject);
+            CollisionOccured(other.gameObject);
         }
     }
 
-    void ExitCollision2D(Collider2D other)
+    void OnCollisionExit2D(Collision2D other)
     {
         if (exitCollision)
         {
-            Collision(other.gameObject);
+            CollisionOccured(other.gameObject);
         }
     }
 
-    void OnTrigger2D(Collision2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("on collison detected point 1 view trigger");
         if (onTrigger)
         {
-            Collision(other.gameObject);
+            CollisionOccured(other.gameObject);
         }
     }
 
-    void StayTrigger2D(Collision2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         if (stayTrigger)
         {
-            Collision(other.gameObject);
+            CollisionOccured(other.gameObject);
         }
     }
 
-    void ExitTrigger2D(Collision2D other)
+    void OnTriggerExit2D(Collider2D other)
     {
         if (exitTrigger)
         {
-            Collision(other.gameObject);
+            CollisionOccured(other.gameObject);
         }
     }
 
-    void Collision(GameObject other)
+    void CollisionOccured(GameObject other)
     {
         if (!disableControl)
         {

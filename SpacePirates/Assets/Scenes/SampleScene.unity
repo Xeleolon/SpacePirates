@@ -1401,16 +1401,16 @@ MonoBehaviour:
         m_CallState: 2
     gameObject: {fileID: 0}
   disableControl: 0
-  collisionTag: Wall
+  collisionTag: 
   onCollision: 1
-  stayCollision: 1
-  exitCollision: 1
+  stayCollision: 0
+  exitCollision: 0
   onTrigger: 0
   stayTrigger: 0
   exitTrigger: 0
   lastHit: {fileID: 0}
---- !u!61 &935568367
-BoxCollider2D:
+--- !u!70 &935568367
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1444,17 +1444,8 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Direction: 0
 --- !u!1 &988626892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,7 +1464,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &988626893
 BoxCollider2D:
   m_ObjectHideFlags: 0
