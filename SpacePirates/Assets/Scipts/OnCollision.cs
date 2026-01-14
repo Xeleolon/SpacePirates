@@ -23,10 +23,10 @@ public class OnCollision : MonoBehaviour
     [HideInInspector] public GameObject lastHit;
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("on collison detected point 1");
+        //Debug.Log("on collison detected point 1");
         if (onCollision)
         {
-            Debug.Log("collison detected point 2");
+            //Debug.Log("collison detected point 2");
             CollisionOccured(other.gameObject);
         }
     }
@@ -49,7 +49,7 @@ public class OnCollision : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("on collison detected point 1 view trigger");
+        //Debug.Log("on collison detected point 1 view trigger");
         if (onTrigger)
         {
             CollisionOccured(other.gameObject);
