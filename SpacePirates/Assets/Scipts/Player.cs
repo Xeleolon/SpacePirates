@@ -65,7 +65,6 @@ public class Player : MonoBehaviour
     [SerializeField] float speedGravity = 5;
     [Range(1, 10)]
     [SerializeField] float speedZeroG = 5;
-    [SerializeField] float speedShip = 5;
 
     Rigidbody2D rb;
     Animator animator;
@@ -87,31 +86,13 @@ public class Player : MonoBehaviour
         //cam.ScreenToWorldPoint(look);
     }
     //movements
-    Vector2 movementVar;
-    Vector2 mousePos;
+    Vector2 heldInput;
     bool keyboardControl;
-
-    
 
     void Update()
     {
         #region movement Updates
-        /*Vector2 movementInput = move.ReadValue<Vector2>();
-        movementVar = transform.right * movementInput.x + transform.up * movementInput.y;
         
-        //look to mouse
-        Vector2 mouseVector = look.ReadValue<Vector2>();
-
-        if (mouseVector != Vector2.zero)
-        {
-            keyboardControl = false;
-            mousePos = mouseVector;
-        }
-        else if (keyboardControl)
-        {
-            mouseVector = cameraActive.ScreenToWorldPoint(mouseLook.ReadValue<Vector2>());
-            mousePos = mouseVector;
-        }*/
 
         
          Vector2 input = move.ReadValue<Vector2>();
@@ -121,12 +102,34 @@ public class Player : MonoBehaviour
         animator.SetFloat("Horizontal", input.x);
         animator.SetFloat("Vertical", input.y);
         animator.SetFloat("Speed", input.sqrMagnitude);
-        Debug.Log(input.sqrMagnitude);
-        rb.MovePosition(rb.position + input.normalized * speedGravity * Time.fixedDeltaTime);
-         
-         
-         
-#endregion
+
+        float curSpeed;
+        switch (controlMovement)
+        {
+            case movements.playerGravity:
+                heldInput = input;
+                curSpeed = speedGravity;
+                break;
+            case movements.PlayerZeroG:
+                if (heldInput.x != input.x && input.x != 0)
+                {
+                    heldInput.x += input.x;
+                }
+
+                if (heldInput.y != input.y && input.y != 0)
+                {
+                    heldInput.y += input.y;
+                }
+                curSpeed = speedZeroG;
+                break;
+        }
+
+        //Debug.Log(input.sqrMagnitude);
+        rb.MovePosition(rb.position + heldInput.normalized * speedGravity * Time.fixedDeltaTime);
+
+
+
+        #endregion
 
 
 
@@ -137,55 +140,13 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         #region movement FixedUpdates
-        /*//movments
-        switch (controlMovement)
-        {
-             case movements.playerGravity:
-                PlayerGravityMovement();
-                PlayerRotation();
-                break;
-
-             case movements.PlayerZeroG:
-                PlayerZeroGMovement();
-                PlayerRotation();
-                PlayerZeroGMovement();
-                break;
-        }
-
-        void PlayerGravityMovement()
-        {
-            rb.MovePosition(rb.position + movementVar * speedGravity * Time.fixedDeltaTime);
-        }
-
-        void PlayerZeroGMovement()
-        {
-            rb.AddForce(movementVar * speedZeroG);
-        }
-
-
-        //playerRotation
-        void PlayerRotation()
-        {
-            Vector2 lookDir;
-            if (!keyboardControl)
-            {
-                lookDir = mousePos;
-            }
-            else
-            {
-                lookDir = mousePos - rb.position;
-            }
-            float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-
-            rb.rotation = angle;
-        }
-        */
+        
         #endregion
 
     }
 
     #region movement Switch
-    public void SwitchMovement(movements movementType, GameObject controlObject)
+    public void SwitchMovement(movements movementType)
     {
 
         switch (movementType)

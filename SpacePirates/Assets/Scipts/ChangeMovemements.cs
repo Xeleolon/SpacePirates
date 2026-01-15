@@ -4,7 +4,7 @@ public class ChangeMovemements : MonoBehaviour
 {
     [SerializeField] movements movementTypeEnter = movements.Ship;
     [SerializeField] bool exit;
-    [SerializeField] GameObject ship;
+    
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -13,7 +13,7 @@ public class ChangeMovemements : MonoBehaviour
             Player player = other.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                player.SwitchMovement(movementTypeEnter, ship);
+                player.SwitchMovement(movementTypeEnter);
             }
         }
     }
@@ -25,7 +25,7 @@ public class ChangeMovemements : MonoBehaviour
             Player player = other.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                player.SwitchMovement(movements.PlayerZeroG, ship);
+                player.SwitchMovement(movements.PlayerZeroG);
             }
         }
     }
