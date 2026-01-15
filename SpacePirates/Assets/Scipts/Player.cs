@@ -70,23 +70,17 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     public Camera cameraActive;
 
-    [Header("Weapon/Tools")]
-    [SerializeField] handItem heldItem = handItem.grapple;
+    [SerializeField] float health = 10;
+    float curHealth;
 
-    [SerializeField] Transform grappleHead;
-    [SerializeField] Transform grappleHeadHome;
-    [SerializeField] float grappleSpeed = 2;
-    [SerializeField] float grappleReturnSpeed = 10;
-    [SerializeField] float grappleRange = 5;
-    [SerializeField] OnCollision grappleCollision;
-    private Vector3 grappleOffset;
+    
 
     
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        grappleOffset = grappleHead.position - transform.position;
+        health = curHealth;
 
         //cam.ScreenToWorldPoint(look);
     }
@@ -95,11 +89,7 @@ public class Player : MonoBehaviour
     Vector2 mousePos;
     bool keyboardControl;
 
-    private enum weaponState { prepped, loading, returning, firing, hit}
-    //fire
-    bool toolInput;
-    bool grappleMovementOverride = false;
-    weaponState grappleState = weaponState.prepped;
+    
 
     void Update()
     {
@@ -122,64 +112,9 @@ public class Player : MonoBehaviour
         }
         #endregion
 
-        if (toolInput)
-        {
-            switch (heldItem)
-            {
-                case handItem.grapple:
-                    GrappleFire();
-                break;
+        
 
-                case handItem.gun:
-                    toolInput = false;
-                    grappleMovementOverride = false;
-                break;
-            }
-        }
-
-        void GrappleFire()
-        {
-           if (shoot.ReadValue<float>() <= 0)
-           {
-                toolInput = false;
-                grappleMovementOverride = false;
-                if (grappleState != weaponState.prepped)
-                {
-                    grappleState = weaponState.returning;
-               
-                    StartCoroutine(ReturnGrapple());
-                }
-                return;
-           }
-
-           switch (grappleState)
-            {
-                case weaponState.prepped: //ready to fire
-                    grappleMovementOverride = true;
-                    grappleState = weaponState.firing;
-                    grappleCollision.disableControl = true;
-                    firingGrapple();
-                    break;
-
-                case weaponState.firing: //in motion of firing
-                    firingGrapple();
-                    break;
-
-            }
-
-            void firingGrapple()
-            {
-                if (Vector3.Distance(grappleHead.position, transform.position) >= grappleRange)
-                {
-                    grappleState = weaponState.returning;
-                    StartCoroutine(ReturnGrapple());
-                }
-                else
-                {
-                    grappleHead.position = Vector3.MoveTowards(grappleHead.position, grappleHeadHome.up * (grappleRange + 1), (grappleSpeed * Time.deltaTime));
-                }
-            }
-        }
+        
 
     }
 
@@ -187,21 +122,18 @@ public class Player : MonoBehaviour
     {
         #region movement FixedUpdates
         //movments
-        if (!grappleMovementOverride)
+        switch (controlMovement)
         {
-            switch (controlMovement)
-            {
-                case movements.playerGravity:
-                    PlayerGravityMovement();
-                    PlayerRotation();
-                    break;
+             case movements.playerGravity:
+                PlayerGravityMovement();
+                PlayerRotation();
+                break;
 
-                case movements.PlayerZeroG:
-                    PlayerZeroGMovement();
-                    PlayerRotation();
-                    PlayerZeroGMovement();
-                    break;
-            }
+             case movements.PlayerZeroG:
+                PlayerZeroGMovement();
+                PlayerRotation();
+                PlayerZeroGMovement();
+                break;
         }
 
         void PlayerGravityMovement()
@@ -268,61 +200,29 @@ public class Player : MonoBehaviour
     #region WeaponFire
     private void FireInput(InputAction.CallbackContext context)
     {
-        if (toolInput)
-        {
-            return;
-        }
 
-        switch (heldItem)
-        {
-            case handItem.grapple:
-
-                toolInput = true;
-            break;
-
-            case handItem.gun:
-                break;
-        }
+        Debug.Log("fire");
     }
     #endregion
 
-    #region grapple
-    private IEnumerator ReturnGrapple()
-    {
-        grappleMovementOverride = false;
 
-        while (Vector3.Distance(grappleHead.position, grappleHeadHome.position) > 0.1f)
+    #region Health
+
+    public void AlterHealth(float alter)
+    {
+        curHealth += alter;
+        if (curHealth <= 0)
         {
-            grappleHead.position = Vector3.MoveTowards(grappleHead.position, grappleHeadHome.position, (grappleReturnSpeed * Time.deltaTime + rb.linearVelocity.x + rb.linearVelocity.y));
-            yield return null;
+            curHealth = 0;
+            Debug.Log("Player Died");
         }
-        grappleState = weaponState.prepped;
-        yield return null;
-
-    }
-
-    private IEnumerator HitMoveGrapple()
-    {
-        grappleState = weaponState.hit;
-        grappleCollision.disableControl = false;
-        grappleHead.SetParent(transform.parent);
-        while (Vector3.Distance(transform.position, grappleHead.position) > 0.1f)
+        else if (curHealth >= health)
         {
-            transform.position = Vector3.MoveTowards(transform.position, grappleHead.position, (grappleReturnSpeed * Time.deltaTime));
-            yield return null;
+            curHealth = health;
+
         }
-        grappleHead.SetParent(transform.GetChild(0));
-        grappleMovementOverride = false;
-        grappleState = weaponState.prepped;
-        yield return null;
-
     }
 
-    public void GrappleHit(GameObject other)
-    {
-        Debug.Log("grapple hit");
-        //GameObject hit = other.GetComponent<OnCollision>().lastHit;
-        StartCoroutine(HitMoveGrapple());
-    }
     #endregion
+
 }
