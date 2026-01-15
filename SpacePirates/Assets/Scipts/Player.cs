@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
     [SerializeField] float speedShip = 5;
 
     Rigidbody2D rb;
+    Animator animator;
     public Camera cameraActive;
 
     [SerializeField] float health = 10;
@@ -80,6 +81,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         health = curHealth;
 
         //cam.ScreenToWorldPoint(look);
@@ -94,7 +96,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         #region movement Updates
-        Vector2 movementInput = move.ReadValue<Vector2>();
+        /*Vector2 movementInput = move.ReadValue<Vector2>();
         movementVar = transform.right * movementInput.x + transform.up * movementInput.y;
         
         //look to mouse
@@ -109,19 +111,33 @@ public class Player : MonoBehaviour
         {
             mouseVector = cameraActive.ScreenToWorldPoint(mouseLook.ReadValue<Vector2>());
             mousePos = mouseVector;
-        }
-        #endregion
+        }*/
 
         
+         Vector2 input = move.ReadValue<Vector2>();
+        //Vector2 movement;
+        //movement = input.normalized * speed * Time.deltaTime;
+        //transform.position += new Vector3(movement.x, movement.y, transform.position.z);
+        animator.SetFloat("Horizontal", input.x);
+        animator.SetFloat("Vertical", input.y);
+        animator.SetFloat("Speed", input.sqrMagnitude);
+        Debug.Log(input.sqrMagnitude);
+        rb.MovePosition(rb.position + input.normalized * speedGravity * Time.fixedDeltaTime);
+         
+         
+         
+#endregion
 
-        
+
+
+
 
     }
 
     private void FixedUpdate()
     {
         #region movement FixedUpdates
-        //movments
+        /*//movments
         switch (controlMovement)
         {
              case movements.playerGravity:
@@ -163,6 +179,7 @@ public class Player : MonoBehaviour
 
             rb.rotation = angle;
         }
+        */
         #endregion
 
     }
