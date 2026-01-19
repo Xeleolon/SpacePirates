@@ -1,11 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
-
-public enum movements { playerGravity, PlayerZeroG, Ship}
 public enum handItem {grapple, gun}
 
-public class Player : MonoBehaviour
+public class Player : BaseMovement
 {
     #region Awake & Input
     private InputSystem_Actions playerControls;
@@ -57,18 +55,9 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    [Header("Movements")]
-    [SerializeField] movements controlMovement = movements.playerGravity;
 
-    //Vector3 movePoint;
-    [Range(1, 10)]
-    [SerializeField] float speedGravity = 5;
-    [Range(1, 10)]
-    [SerializeField] float speedZeroG = 5;
 
-    Rigidbody2D rb;
     Animator animator;
-    public Camera cameraActive;
 
     [SerializeField] float health = 10;
     float curHealth;
@@ -77,16 +66,16 @@ public class Player : MonoBehaviour
 
     
 
-    private void Start()
+    public override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        base.Start();
+        useTime = true;
         animator = GetComponent<Animator>();
         health = curHealth;
 
         //cam.ScreenToWorldPoint(look);
     }
     //movements
-    Vector2 heldInput;
     bool keyboardControl;
 
     void Update()
@@ -103,29 +92,8 @@ public class Player : MonoBehaviour
         animator.SetFloat("Vertical", input.y);
         animator.SetFloat("Speed", input.sqrMagnitude);
 
-        float curSpeed;
-        switch (controlMovement)
-        {
-            case movements.playerGravity:
-                heldInput = input;
-                curSpeed = speedGravity;
-                break;
-            case movements.PlayerZeroG:
-                if (heldInput.x != input.x && input.x != 0)
-                {
-                    heldInput.x += input.x;
-                }
+        UpdateMove(input);
 
-                if (heldInput.y != input.y && input.y != 0)
-                {
-                    heldInput.y += input.y;
-                }
-                curSpeed = speedZeroG;
-                break;
-        }
-
-        //Debug.Log(input.sqrMagnitude);
-        rb.MovePosition(rb.position + heldInput.normalized * speedGravity * Time.fixedDeltaTime);
 
 
 
@@ -145,26 +113,7 @@ public class Player : MonoBehaviour
 
     }
 
-    #region movement Switch
-    public void SwitchMovement(movements movementType)
-    {
-
-        switch (movementType)
-        {
-            case movements.playerGravity:
-                rb.linearVelocity = Vector3.zero;
-                controlMovement = movementType;
-            break;
-
-            case movements.PlayerZeroG:
-                controlMovement = movementType;
-            break;
-
-            case movements.Ship:
-
-            break;
-        }
-    }
+    #region keyboardSwitch
 
     private void KeyboardSwitch(InputAction.CallbackContext context)
     {

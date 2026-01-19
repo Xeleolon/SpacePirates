@@ -2,31 +2,26 @@ using UnityEngine;
 
 public class ChangeMovemements : MonoBehaviour
 {
-    [SerializeField] movements movementTypeEnter = movements.Ship;
+    [SerializeField] movements movementTypeEnter = movements.playerGravity;
+    [SerializeField] movements movementTypeExit = movements.PlayerZeroG;
     [SerializeField] bool exit;
     
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player")
+        BaseMovement creature = other.gameObject.GetComponent<BaseMovement>();
+        if (creature != null)
         {
-            Player player = other.gameObject.GetComponent<Player>();
-            if (player != null)
-            {
-                player.SwitchMovement(movementTypeEnter);
-            }
+            creature.SwitchMovement(movementTypeEnter);
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (exit && other.gameObject.tag == "Player")
+        BaseMovement creature = other.gameObject.GetComponent<BaseMovement>();
+        if (creature != null)
         {
-            Player player = other.gameObject.GetComponent<Player>();
-            if (player != null)
-            {
-                player.SwitchMovement(movements.PlayerZeroG);
-            }
+            creature.SwitchMovement(movementTypeExit);
         }
     }
 }

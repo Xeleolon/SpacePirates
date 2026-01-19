@@ -1,15 +1,21 @@
 using UnityEngine;
 
-public class SlimeEmeny : EmenyBase
+public class SlimeEmeny : BaseMovement
 {
-    [SerializeField] float moveDistance = 1;
     [SerializeField] float movePause = 1;
+    float movementHoldClock = 0;
+
+    [Header("Damage")]
     [SerializeField] float playerDamage = 1;
     [SerializeField] float breakableDamage = 1;
-    float movementHoldClock = 0;
-    [SerializeField] Rigidbody2D rb;
 
     bool damage;
+
+    public override void Start()
+    {
+        base.Start();
+        useTime = false;
+    }
     private void Update()
     {
         if (movementHoldClock <= 0)
@@ -25,13 +31,32 @@ public class SlimeEmeny : EmenyBase
 
         void randomMovment()
         {
-            Vector2 direction = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
-            direction = Vector2.ClampMagnitude(direction, moveDistance);
-            rb.MovePosition(rb.position + direction);
+            Vector2 direction = Vector2.zero;
+            int randomDirection = Random.Range(0, 4);
+            switch (randomDirection)
+            {
+                case 1:
+                    direction = Vector2.up;
+                    break;
+                case 2:
+                    direction = Vector2.right;
+                    break;
+                case 3:
+                    direction = Vector2.down;
+                    break;
+                case 4:
+                    direction = Vector2.left;
+                    break;
+
+            }
+
+            UpdateMove(direction);
+
+
         }
     }
 
-    void OnCollisionEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")
         {
