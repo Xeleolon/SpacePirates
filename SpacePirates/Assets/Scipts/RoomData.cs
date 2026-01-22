@@ -7,27 +7,27 @@ public class RoomData
     public string name;
     [Tooltip("number of damage systems")]
     public int systems = 1;
-    private int damagesytems = 0;
-    public Image damageicon;
+    private int damagesystems = 0;
+    public Image damageIcon;
 
     public void DamageSystem(bool damage)
     {
         if (damage)
         {
-            damagesytems += 1;
-            if (damagesytems > systems)
+            damagesystems += 1;
+            if (damagesystems > systems)
             {
                 Debug.Log("Warning attemping to damage" + name + " more than " + systems + " ever add more systems or check if something is breaking more than once");
-                damagesytems = systems;
+                damagesystems = systems;
             }
         }
         else
         {
-            damagesytems -=1;
-            if (damagesytems < 0)
+            damagesystems -= 1;
+            if (damagesystems < 0)
             {
                 Debug.Log("Warning attemping to reapir " + name + " more than " + systems + " ever add more systems or check if something is reapairng more than once");
-                damagesytems = systems;
+                damagesystems = systems;
             }
         }
     }
