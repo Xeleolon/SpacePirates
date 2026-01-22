@@ -6,8 +6,8 @@ public class SlimeEmeny : BaseMovement
     float movementHoldClock = 0;
 
     [Header("Damage")]
-    [SerializeField] float playerDamage = 1;
-    [SerializeField] float breakableDamage = 1;
+    [SerializeField] int playerDamage = 1;
+    [SerializeField] int breakableDamage = 1;
 
     bool damage;
 

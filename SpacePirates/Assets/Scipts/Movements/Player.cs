@@ -59,8 +59,8 @@ public class Player : BaseMovement
 
     Animator animator;
 
-    [SerializeField] float health = 10;
-    float curHealth;
+    [SerializeField] int health = 10;
+    int curHealth;
 
     
 
@@ -71,7 +71,7 @@ public class Player : BaseMovement
         base.Start();
         useTime = true;
         animator = GetComponent<Animator>();
-        health = curHealth;
+        curHealth = health;
 
         //cam.ScreenToWorldPoint(look);
     }
@@ -135,18 +135,31 @@ public class Player : BaseMovement
 
     #region Health
 
-    public void AlterHealth(float alter)
+    public void AlterHealth(int alter)
     {
         curHealth += alter;
         if (curHealth <= 0)
         {
             curHealth = 0;
             Debug.Log("Player Died");
+            LevelUIControl.instance.ChangeHeath(curHealth - alter);
         }
         else if (curHealth >= health)
         {
             curHealth = health;
+            LevelUIControl.instance.ChangeHeath(curHealth);
 
+        }
+        else
+        {
+            if (alter < 0)
+            {
+                LevelUIControl.instance.ChangeHeath(curHealth - alter);
+            }
+            else
+            {
+                LevelUIControl.instance.ChangeHeath(curHealth);
+            }
         }
     }
 
