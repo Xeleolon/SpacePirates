@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SlimeEmeny : BaseMovement
+public class SlimeEmenyGridBase : GridMovement
 {
     [SerializeField] float movePause = 1;
     float movementHoldClock = 0;
@@ -14,26 +14,19 @@ public class SlimeEmeny : BaseMovement
 
     bool damage;
 
-    public override void Start()
+    void Start()
     {
-        base.Start();
-        useTime = false;
     }
     int[] availableDirection = new int[0];
     RaycastHit2D[] hit = new RaycastHit2D[4];
     private void Update()
     {
-        if (movementHoldClock <= 0)
+        if (!UpdateMove())
         {
-            randomMovment();
-            movementHoldClock = movePause;
-            damage = true;
+            RandomMovment();
         }
-        else
-        {
-            movementHoldClock -= 1 * Time.deltaTime;
-        }
-        void randomMovment()
+        
+        void RandomMovment()
         {
 
             //int[] availableDirection = new int[0];
@@ -104,7 +97,7 @@ public class SlimeEmeny : BaseMovement
                 }
                 else
                 {
-                    UpdateMove(direction);
+                    moveTowards(direction);
                 }
             }
 
