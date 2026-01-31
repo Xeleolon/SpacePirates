@@ -3,6 +3,9 @@ public class Breakable : MonoBehaviour
 {
 
     [SerializeField] float health = 1;
+    public Attractant attractant = Attractant.energy;
+    [Range(0,10)]
+    public float attractiveMeter = 1;
     float currentHeath;
     //Sprite[] sprite;
 
