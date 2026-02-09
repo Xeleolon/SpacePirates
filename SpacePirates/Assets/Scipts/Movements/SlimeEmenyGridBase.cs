@@ -4,13 +4,12 @@ public class SlimeEmenyGridBase : GridMovement
 {
     [SerializeField] float movePause = 1;
     float movementHoldClock = 0;
+    [SerializeField] float rayCastRange = 1;
+    [SerializeField] LayerMask nullAvoidance;
 
     [Header("Damage")]
     [SerializeField] int playerDamage = 1;
     [SerializeField] int breakableDamage = 1;
-    [SerializeField] float rayCastRange = 1;
-    [SerializeField] LayerMask nullAvoidance;
-    [SerializeField] string wallObject = "wall";
 
     public bool stepMovement = false;
 
@@ -23,7 +22,7 @@ public class SlimeEmenyGridBase : GridMovement
     RaycastHit2D[] hit = new RaycastHit2D[4];
     private void Update()
     {
-        if (!UpdateMove() && stepMovement)
+        if (!UpdateMove() /*&& stepMovement*/)
         {
             RandomMovment();
         }
@@ -53,28 +52,45 @@ public class SlimeEmenyGridBase : GridMovement
 
                 }
                 hit[i] = Physics2D.Raycast(transform.position, direction, rayCastRange, nullAvoidance);
-                if ((hit[i] && hit[i].transform.tag != wallObject) || !hit[i])
+                if (!HitCheck(hit[i]))
                 {
+                    //Debug.Log("Hit " + direction + " had not colision with an object");
                     int[] tempDirections = new int[availableDirection.Length + 1];
-                    if (availableDirection.Length > 1)
+                    //Debug.Log("hit " + i + "temp direction slots " + tempDirections.Length);
+
+                    if (availableDirection.Length >= 1)
                     {
-                        tempDirections = availableDirection;
+                        for (int var = 0; var < availableDirection.Length; var ++)
+                        {
+                            tempDirections[var] = availableDirection[var];
+                            //Debug.Log(i + " cycle " tempDirections[var] + " temp var/availbale var" + availableDirection[var]);
+                        }
                     }
-                    int placement = availableDirection.Length - 1;
+
+                    int placement = availableDirection.Length;
                     if (placement < 0)
                     {
                         placement = 0;
                     }
-                    
+
+                    //Debug.Log("hit " + i + "temp direction slots " + tempDirections.Length + " placement " + placement);
                     tempDirections[placement] = i + 1;
+                    //Debug.Log(i + " placment has varible = " + tempDirections[placement]);
+
                     availableDirection = tempDirections;
+
+                    //Debug.Log("Hit " + i + " has produced " + availableDirection.Length);
+                } 
+                else
+                {
+                    //Debug.Log("Hit " + direction + " has collided");
                 }
             }
 
             if (availableDirection.Length > 0)
             {
                 int randomDirection = availableDirection[Random.Range(0, availableDirection.Length - 1)];
-
+                //Debug.Log("random picked " + randomDirection + "out of " + availableDirection.Length);
                 switch (randomDirection)
                 {
                     case 1:
@@ -91,16 +107,16 @@ public class SlimeEmenyGridBase : GridMovement
                         break;
 
                 }
-                Debug.Log(hit.Length + " "+ randomDirection);
-                if (hit[randomDirection - 1 ])
+                //Debug.Log("number of hits = " + hit.Length + " + direction going in ="+ randomDirection);
+                if (hit[randomDirection - 1])
                 {
                     Actack(hit[randomDirection - 1].transform.gameObject);
-                    Debug.Log("actacking " + hit[randomDirection - 1].transform.gameObject.name);
+                    //Debug.Log("actacking " + hit[randomDirection - 1].transform.gameObject.name);
                 }
                 else
                 {
                     moveTowards(direction);
-                    Debug.Log("Moving towards " + direction);
+                    //Debug.Log("Moving towards " + direction);
                 }
 
                 stepMovement = false;

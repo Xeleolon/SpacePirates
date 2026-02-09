@@ -3,6 +3,8 @@ using UnityEngine;
 public class GridMovement : MonoBehaviour
 {
     [SerializeField] float speed = 5;
+    
+    [SerializeField] string wall;
 
 
     //privatemovevariables
@@ -23,7 +25,7 @@ public class GridMovement : MonoBehaviour
             else
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-                Debug.Log(gameObject.name + " is in motion");
+                //Debug.Log(gameObject.name + " is in motion");
                 return true;             
             }
         }
@@ -37,4 +39,27 @@ public class GridMovement : MonoBehaviour
         //Debug.Log("target = " + target);
         inMotion = true;
     }
+
+    public bool HitCheck(RaycastHit2D hit)
+            {
+                if (hit == null)
+                {
+                    //Debug.Log("hit = null");
+                    return false;
+                }
+                else if (hit.transform == null)
+                {
+                    //Debug.Log("hit but no object actacted");
+                    return false;
+                }
+                else if (hit.transform.gameObject.tag == wall || hit.transform.gameObject.tag == "Player")
+                {
+                    Debug.Log("succesful hit " + hit.transform.gameObject.name);
+                    return true; 
+                }
+
+               Debug.Log("hit " + hit.transform.gameObject.name);
+
+                return false;
+            }
 }

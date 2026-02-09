@@ -7,7 +7,6 @@ public class RockEmeny : GridMovement
 
     [SerializeField] float rayCastRange = 1;
     [SerializeField] LayerMask nullAvoidance;
-    [SerializeField] string wall;
 
     bool actacking = false;
 
@@ -167,28 +166,7 @@ public class RockEmeny : GridMovement
                     return Vector2.left;
             }
 
-            bool HitCheck(RaycastHit2D hit)
-            {
-                if (hit == null)
-                {
-                    //Debug.Log("hit = null");
-                    return false;
-                }
-                else if (hit.transform == null)
-                {
-                    //Debug.Log("hit but no object actacted");
-                    return false;
-                }
-                else if (hit.transform.gameObject.tag == wall || hit.transform.gameObject.tag == "Player")
-                {
-                    Debug.Log("succesful hit " + hit.transform.gameObject.name);
-                    return true; 
-                }
-
-               Debug.Log("hit " + hit.transform.gameObject.name);
-
-                return false;
-            }
+            
         }
 
 
