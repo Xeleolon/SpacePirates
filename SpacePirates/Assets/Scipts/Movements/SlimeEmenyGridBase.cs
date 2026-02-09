@@ -12,6 +12,8 @@ public class SlimeEmenyGridBase : GridMovement
     [SerializeField] LayerMask nullAvoidance;
     [SerializeField] string wallObject = "wall";
 
+    public bool stepMovement = false;
+
     bool damage;
 
     void Start()
@@ -21,14 +23,13 @@ public class SlimeEmenyGridBase : GridMovement
     RaycastHit2D[] hit = new RaycastHit2D[4];
     private void Update()
     {
-        if (!UpdateMove())
+        if (!UpdateMove() && stepMovement)
         {
             RandomMovment();
         }
         
         void RandomMovment()
         {
-
             //int[] availableDirection = new int[0];
             //RaycastHit2D[] hit = new RaycastHit2D[4];
             Vector2 direction = Vector2.zero;
@@ -94,11 +95,15 @@ public class SlimeEmenyGridBase : GridMovement
                 if (hit[randomDirection - 1 ])
                 {
                     Actack(hit[randomDirection - 1].transform.gameObject);
+                    Debug.Log("actacking " + hit[randomDirection - 1].transform.gameObject.name);
                 }
                 else
                 {
                     moveTowards(direction);
+                    Debug.Log("Moving towards " + direction);
                 }
+
+                stepMovement = false;
             }
 
             

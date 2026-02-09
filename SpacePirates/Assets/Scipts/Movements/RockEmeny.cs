@@ -9,6 +9,8 @@ public class RockEmeny : GridMovement
     [SerializeField] LayerMask nullAvoidance;
     [SerializeField] string wall;
 
+    bool actacking = false;
+
 
 
     // Update is called once per frame
@@ -26,9 +28,13 @@ public class RockEmeny : GridMovement
             targeting = false;
         }*/
 
-        if (!UpdateMove())
+        if (!actacking)
         {
-            PickMove();
+            if(!UpdateMove())
+            {
+                PickMove();
+            }
+            //PickMove();
         }
         
     }
@@ -53,7 +59,6 @@ public class RockEmeny : GridMovement
             RaycastHit2D Yhit;
             Vector2 UpDownDirection = Vector2.zero;
             Vector2 leftRightDirection = Vector2.zero;
-            bool Actacking = false;
 
             if (Xdifferntial >= Ydifferntial)
             {
@@ -77,7 +82,7 @@ public class RockEmeny : GridMovement
                     else
                     {
                         float varRandom = Random.Range(0,1);
-                        Actacking = true;
+                        actacking = true;
                         targeting = false;
                         if (varRandom > 0.5f)
                         {
@@ -92,14 +97,15 @@ public class RockEmeny : GridMovement
             }
             else if (Xdifferntial < Ydifferntial)
             {
-                
+                //Debug.Log("moving up or down");
                 
                 
                 UpDownDirection = UpDown();
                 Yhit = Physics2D.Raycast(transform.position, UpDownDirection, rayCastRange, nullAvoidance);
                 if (!HitCheck(Yhit))
                 {
-                    direction = leftRightDirection;
+                    //Debug.Log("Moving up/down and providing direction " + UpDownDirection);
+                    direction = UpDownDirection;
                 }
                 else
                 {
@@ -113,7 +119,7 @@ public class RockEmeny : GridMovement
                     else
                     {
                         float varRandom = Random.Range(0,1);
-                        Actacking = true;
+                        actacking = true;
                         targeting = false;
                         if (varRandom > 0.5f)
                         {
@@ -127,7 +133,8 @@ public class RockEmeny : GridMovement
                     }
                 }
             }
-            if (!Actacking)
+
+            if (!actacking)
             {
                 targeting = false;
                 moveTowards(direction);
@@ -136,11 +143,11 @@ public class RockEmeny : GridMovement
 
             Vector2 UpDown()
             {
-                if (targetplace.position.x == transform.position.x)
+                if (targetplace.position.y == transform.position.y)
                 {
                     return Vector2.zero;
                 }
-                else if (targetplace.position.x > transform.position.x)
+                else if (targetplace.position.y > transform.position.y)
                 {
                     return Vector2.up;
                 }
@@ -149,11 +156,11 @@ public class RockEmeny : GridMovement
 
             Vector2 LeftRight()
             {
-                if (targetplace.position.y == transform.position.y)
+                if (targetplace.position.x == transform.position.x)
                 {
                     return Vector2.zero;
                 }
-                else if (targetplace.position.y > transform.position.y)
+                else if (targetplace.position.x > transform.position.x)
                 {
                     return Vector2.right;
                 }
@@ -164,12 +171,12 @@ public class RockEmeny : GridMovement
             {
                 if (hit == null)
                 {
-                    Debug.Log("hit = null");
+                    //Debug.Log("hit = null");
                     return false;
                 }
                 else if (hit.transform == null)
                 {
-                    Debug.Log("hit but no object actacted");
+                    //Debug.Log("hit but no object actacted");
                     return false;
                 }
                 else if (hit.transform.gameObject.tag == wall || hit.transform.gameObject.tag == "Player")
@@ -178,7 +185,7 @@ public class RockEmeny : GridMovement
                     return true; 
                 }
 
-                Debug.Log("hit " + hit.transform.gameObject.name);
+               Debug.Log("hit " + hit.transform.gameObject.name);
 
                 return false;
             }

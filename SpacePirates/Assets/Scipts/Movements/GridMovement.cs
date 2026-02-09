@@ -23,7 +23,7 @@ public class GridMovement : MonoBehaviour
             else
             {
                 transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-                //Debug.Log("in motion");
+                Debug.Log(gameObject.name + " is in motion");
                 return true;             
             }
         }
