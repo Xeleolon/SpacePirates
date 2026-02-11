@@ -1,5 +1,6 @@
 using UnityEngine;
 public enum Attractant {player, energy, noAttractant};
+
 public class RoomIndex : MonoBehaviour
 {
     [SerializeField] Breakable[] avalableBreakable;
@@ -10,22 +11,24 @@ public class RoomIndex : MonoBehaviour
     void OnVaildate()
     {
         //assign spellizeds fields
-        SetBreakableLists();
+         SetBreakableLists();
 
     }
 
     void Awake()
     {
-        SetBreakableLists();
+        
     }
 
 
     #region generate Breakable Lists
-    void SetBreakableLists()
+    public bool SetBreakableLists()
     {
 
         Breakable[] allBreakables = CompleteAllBreakable();
         energy = BreakableObject(Attractant.energy);
+
+        return true;
 
         Breakable[] BreakableObject(Attractant type)
         {
@@ -71,12 +74,13 @@ public class RoomIndex : MonoBehaviour
     }
     #endregion
 
-    Transform CheckBreakableLists(Attractant type, Vector3 location)
+    public Breakable CheckBreakableLists(Attractant type, Vector3 location)
     {
         switch (type)
         {
             case Attractant.energy:
-                return energy[CheckingLists(energy)].transform;
+
+                return energy[CheckingLists(energy)];
 
             case Attractant.player:
 
@@ -92,10 +96,24 @@ public class RoomIndex : MonoBehaviour
             {
                 float distanceModifier= Vector3.Distance(checkthis[i].transform.position, location);
                 distanceModifier = distanceModifier / 100;
-                if ((checkthis[i].attractiveMeter + distanceModifier) > valueTarget);
+                int checkValue = 0;
+
+                switch(type)
+                {
+                    case Attractant.energy:
+
+                        checkValue = checkthis[i].energyActractive;
+                        break;
+                    default:
+                        checkValue = 0;
+                        Debug.LogWarning(type + " is checking through default set up code line for correct value");
+                        break;
+
+                }
+                if ((checkValue + distanceModifier) > valueTarget);
                 {
                     placementTarget = i;
-                    valueTarget = checkthis[i].attractiveMeter + distanceModifier;
+                    valueTarget = checkValue + distanceModifier;
                 }
 
             }
