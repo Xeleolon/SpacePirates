@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class Doorway : Breakable
 {
-    [SerializeField] int objectNumber = 0;
-    [SerializeField] int[] neighbooringDoors;
+    public int objectNumber = 0;
+    [Tooltip("How many doors away is each door from this door. This is times in level manager by sensor Deperation")]
+    public int[] neighbooringDoors;
 
     RoomIndex[] roomsReffences;
-    Breakable energyTarget;
+    public Breakable energyTarget;
 
     public void GetScore()
     {
@@ -53,5 +54,20 @@ public class Doorway : Breakable
 
         }
     }
+
+    public Breakable GiveBreakaable(Attractant type)
+    {
+        switch(type)
+        {
+            case Attractant.energy:
+            return energyTarget;
+
+            default:
+                Debug.LogWarning(type + " has no assigned target data setup in DoorWay script");
+            return null;
+        }
+    }
+
+
 
 }

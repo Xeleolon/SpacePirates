@@ -8,18 +8,6 @@ public class RoomIndex : MonoBehaviour
 
     private Breakable[] energy;
 
-    void OnVaildate()
-    {
-        //assign spellizeds fields
-         SetBreakableLists();
-
-    }
-
-    void Awake()
-    {
-        
-    }
-
 
     #region generate Breakable Lists
     public bool SetBreakableLists()
@@ -38,7 +26,7 @@ public class RoomIndex : MonoBehaviour
             for (int i = 0; i < allBreakables.Length; i++)
             {
                 //Debug.Log(i + " placement, attrachant is " + allBreakables[i].attractant);
-                if (allBreakables[i].attractant == type)
+                if (allBreakables[i].CheckAttractanctMatch(type))
                 {
                     tempStorage[numbOfAttractant] = allBreakables[i];
                     numbOfAttractant = numbOfAttractant + 1;
