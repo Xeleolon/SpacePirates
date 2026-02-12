@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 public enum handItem {grapple, gun}
 
-public class Player : BaseMovement
+public class Player : GridMovement
 {
     #region Awake & Input
     private InputSystem_Actions playerControls;
@@ -60,16 +60,15 @@ public class Player : BaseMovement
     Animator animator;
 
     [SerializeField] int health = 10;
+    [SerializeField] float inputGive = 0.5f;
     int curHealth;
 
     
 
     
 
-    public override void Start()
+    private void Start()
     {
-        base.Start();
-        useTime = true;
         animator = GetComponent<Animator>();
         curHealth = health;
 
@@ -81,18 +80,39 @@ public class Player : BaseMovement
     void Update()
     {
         #region movement Updates
-        
+        if (!UpdateMove())
+        {
+            Vector2 input = move.ReadValue<Vector2>();
+            //Vector2 movement;
+            //movement = input.normalized * speed * Time.deltaTime;
+            //transform.position += new Vector3(movement.x, movement.y, transform.position.z);
+            animator.SetFloat("Horizontal", input.x);
+            animator.SetFloat("Vertical", input.y);
+            animator.SetFloat("Speed", input.sqrMagnitude);
+
+            Vector2 direction = Vector2.zero;
+            if (input.x >= inputGive)
+            {
+                direction = Vector2.right;
+            }
+            else if (input.x <= -inputGive)
+            {
+                direction = Vector2.left;
+            }
+
+            if (input.y >= inputGive)
+            {
+                direction = Vector2.up;
+            }
+            else if (input.y <= -inputGive)
+            {
+                direction = Vector2.down;
+            }
+
+            moveTowards(direction);
+        }
 
         
-         Vector2 input = move.ReadValue<Vector2>();
-        //Vector2 movement;
-        //movement = input.normalized * speed * Time.deltaTime;
-        //transform.position += new Vector3(movement.x, movement.y, transform.position.z);
-        animator.SetFloat("Horizontal", input.x);
-        animator.SetFloat("Vertical", input.y);
-        animator.SetFloat("Speed", input.sqrMagnitude);
-
-        UpdateMove(input);
 
 
 
