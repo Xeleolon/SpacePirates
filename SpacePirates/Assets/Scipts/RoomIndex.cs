@@ -67,8 +67,14 @@ public class RoomIndex : MonoBehaviour
         switch (type)
         {
             case Attractant.energy:
-
-                return energy[CheckingLists(energy)];
+                if (energy == null || energy.Length == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return energy[CheckingLists(energy)];
+                }
 
             case Attractant.player:
 
@@ -105,6 +111,8 @@ public class RoomIndex : MonoBehaviour
                 }
 
             }
+
+            //Debug.Log(placementTarget + " = placmeent target " + energy.Length + " = engery length");
             return placementTarget;
         }
 

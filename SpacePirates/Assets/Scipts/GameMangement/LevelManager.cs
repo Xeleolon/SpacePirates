@@ -42,7 +42,7 @@ public class LevelManager : MonoBehaviour
             int[] typeValues = new int[allDoors.Length];
             for (int eachDoor = 0; eachDoor < allDoors.Length; eachDoor++)
             {
-                typeBreakable[eachDoor] = allDoors[eachDoor].GiveBreakaable(type);
+                typeBreakable[eachDoor] = allDoors[eachDoor].GiveBreakaable(type); //this is the highestvalue breakable for the door
                 typeValues[eachDoor] = allDoors[eachDoor].GiveValue(type);
             }
 
@@ -52,7 +52,24 @@ public class LevelManager : MonoBehaviour
 
                 for (int alterCopy = 0; alterCopy < loopCopyOfTypeValues.Length; alterCopy++) //alter the copid list values for the door offeset for neiber
                 {
-                    loopCopyOfTypeValues[alterCopy] = loopCopyOfTypeValues[alterCopy] - (allDoors[eachDoor].neighbooringDoors[alterCopy] * sensorDeperation); //alter values for the door
+                    //Debug.Log("at start door" + eachDoor + ", has for door" + alterCopy + " a score of " + loopCopyOfTypeValues[alterCopy]);
+                    int tempAlter = loopCopyOfTypeValues[alterCopy]; //alter values for the door
+                    tempAlter = tempAlter - (allDoors[eachDoor].neighbooringDoors[alterCopy] * sensorDeperation); //alter values for the door
+
+
+                    if (loopCopyOfTypeValues[alterCopy] == 0)
+                    {
+                        loopCopyOfTypeValues[alterCopy] = 0;
+                    }
+                    else if (tempAlter <= 1)
+                    {
+                        loopCopyOfTypeValues[alterCopy] = 1;
+                    }
+                    else
+                    {
+                        loopCopyOfTypeValues[alterCopy] = tempAlter;
+                    }
+                    //Debug.Log("at end door" + eachDoor + ", has for door" + alterCopy + " a score of " + loopCopyOfTypeValues[alterCopy]);
                 }
 
 
@@ -77,7 +94,13 @@ public class LevelManager : MonoBehaviour
                     }
                 }
 
-                allDoors[eachDoor].AsisgnTarget(type, typeBreakable[placement]);
+
+                //error need to assign neighbours only
+                if (eachDoor != placement)
+                {
+                    allDoors[eachDoor].AsisgnTarget(type, allDoors[placement], typeValues[placement]);
+                }
+                
 
             }
         }
