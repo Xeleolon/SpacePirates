@@ -9,7 +9,8 @@ public class Doorway : Breakable
 
     [SerializeField] RoomIndex[] roomsReffences;
     public Breakable energyTarget;
-
+    [SerializeField] string emenyTag;
+    [SerializeField] string playerTag;
     public void GetScore()
     {
         if (roomsReffences == null || roomsReffences.Length <= 0)
@@ -68,6 +69,26 @@ public class Doorway : Breakable
             default:
                 Debug.LogWarning(type + " has no assigned target data setup in DoorWay script");
             return null;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == emenyTag)
+        {
+            GridMovement emenyMovementScript = other.gameObject.GetComponent<GridMovement>();
+            if (emenyMovementScript != null)
+            {
+                emenyMovementScript.TargetUpdate(roomsReffences);
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == playerTag)
+        {
+            //provide player as avialble option
         }
     }
 

@@ -62,7 +62,7 @@ public class RoomIndex : MonoBehaviour
     }
     #endregion
 
-    public Breakable CheckBreakableLists(Attractant type, Vector3 location)
+    public Breakable CheckBreakableLists(Attractant type, Vector3 location) //return close object ot provide object of attranct type
     {
         switch (type)
         {

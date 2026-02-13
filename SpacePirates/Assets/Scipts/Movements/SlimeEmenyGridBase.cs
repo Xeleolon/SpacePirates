@@ -157,6 +157,8 @@ public class SlimeEmenyGridBase : GridMovement
         }
     }
 
+    
+
     /*void OnCollisionEnter2D(Collision2D other)
     {
         Actack(other.gameObject);

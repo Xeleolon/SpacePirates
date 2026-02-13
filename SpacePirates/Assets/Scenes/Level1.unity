@@ -3230,7 +3230,7 @@ GameObject:
   - component: {fileID: 597286377}
   - component: {fileID: 597286376}
   - component: {fileID: 597286378}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorWay2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3311,7 +3311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 01000000010000000000000002000000010000000300000002000000
@@ -3319,6 +3319,8 @@ MonoBehaviour:
   - {fileID: 1542053116}
   - {fileID: 1154955814}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
 --- !u!1 &615134560
 GameObject:
   m_ObjectHideFlags: 0
@@ -4466,8 +4468,8 @@ GameObject:
   - component: {fileID: 773624762}
   - component: {fileID: 773624761}
   m_Layer: 6
-  m_Name: Slime (1)
-  m_TagString: Untagged
+  m_Name: Rock
+  m_TagString: Emeny
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4486,8 +4488,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   wall: Wall
-  targetplace: {fileID: 0}
+  targetplace: {fileID: 2010080884}
   targeting: 0
+  currentRoom: {fileID: 841927382}
   rayCastRange: 1
   nullAvoidance:
     serializedVersion: 2
@@ -4540,7 +4543,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.45
 --- !u!50 &773624764
 Rigidbody2D:
   serializedVersion: 5
@@ -4632,7 +4635,7 @@ Transform:
   m_GameObject: {fileID: 773624760}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 7, z: 0}
+  m_LocalPosition: {x: 5, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4649,7 +4652,7 @@ GameObject:
   - component: {fileID: 787608692}
   - component: {fileID: 787608691}
   - component: {fileID: 787608690}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorWay3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4669,7 +4672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 02000000010000000200000000000000030000000100000002000000
@@ -4677,6 +4680,8 @@ MonoBehaviour:
   - {fileID: 647156760}
   - {fileID: 1144365938}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
 --- !u!61 &787608691
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4986,7 +4991,7 @@ GameObject:
   - component: {fileID: 838196089}
   - component: {fileID: 838196088}
   - component: {fileID: 838196090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorWay1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5067,7 +5072,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 01000000000000000100000001000000020000000200000003000000
@@ -5075,6 +5080,8 @@ MonoBehaviour:
   - {fileID: 1542053116}
   - {fileID: 647156760}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
 --- !u!1 &841927380
 GameObject:
   m_ObjectHideFlags: 0
@@ -6741,7 +6748,7 @@ Transform:
   m_GameObject: {fileID: 1039880631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 1, z: 0}
+  m_LocalPosition: {x: 1, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10909,7 +10916,7 @@ GameObject:
   - component: {fileID: 1731946951}
   - component: {fileID: 1731946950}
   - component: {fileID: 1731946952}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorWay6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10990,7 +10997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 03000000030000000200000002000000010000000100000000000000
@@ -10998,6 +11005,8 @@ MonoBehaviour:
   - {fileID: 1801217769}
   - {fileID: 1679933944}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
 --- !u!1 &1794012069
 GameObject:
   m_ObjectHideFlags: 0
@@ -11043,7 +11052,7 @@ GameObject:
   - component: {fileID: 1800109610}
   - component: {fileID: 1800109609}
   - component: {fileID: 1800109611}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorWay4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11124,7 +11133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 02000000020000000100000003000000000000000200000001000000
@@ -11132,6 +11141,8 @@ MonoBehaviour:
   - {fileID: 1154955814}
   - {fileID: 1801217769}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
 --- !u!1 &1801217767
 GameObject:
   m_ObjectHideFlags: 0
@@ -11491,7 +11502,7 @@ GameObject:
   - component: {fileID: 1890384875}
   m_Layer: 6
   m_Name: Slime
-  m_TagString: Untagged
+  m_TagString: Emeny
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11628,7 +11639,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.45
 --- !u!114 &1890384874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12372,7 +12383,8 @@ GameObject:
   - component: {fileID: 2010080884}
   - component: {fileID: 2010080883}
   - component: {fileID: 2010080885}
-  m_Layer: 0
+  - component: {fileID: 2010080886}
+  m_Layer: 7
   m_Name: DoorWay0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12453,7 +12465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 00000000010000000100000002000000020000000300000003000000
@@ -12461,6 +12473,34 @@ MonoBehaviour:
   - {fileID: 841927382}
   - {fileID: 1542053116}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
+--- !u!114 &2010080886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010080882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5622d387eb092849beae54aafc1b3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  script: {fileID: 0}
+  collisionEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    gameObject: {fileID: 0}
+  disableControl: 1
+  collisionTag: Emeny
+  onCollision: 0
+  stayCollision: 0
+  exitCollision: 0
+  onTrigger: 1
+  stayTrigger: 0
+  exitTrigger: 0
+  lastHit: {fileID: 0}
 --- !u!1 &2021539193
 GameObject:
   m_ObjectHideFlags: 0
@@ -12606,7 +12646,7 @@ GameObject:
   - component: {fileID: 2022320184}
   - component: {fileID: 2022320183}
   - component: {fileID: 2022320185}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DoorWay5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12687,7 +12727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  attractant: 
+  attractant: 01000000
   energyActractive: 0
   objectNumber: 0
   neighbooringDoors: 03000000020000000300000001000000020000000000000001000000
@@ -12695,6 +12735,8 @@ MonoBehaviour:
   - {fileID: 1144365938}
   - {fileID: 1679933944}
   energyTarget: {fileID: 0}
+  emenyTag: Emeny
+  playerTag: Player
 --- !u!1 &2026448586
 GameObject:
   m_ObjectHideFlags: 0

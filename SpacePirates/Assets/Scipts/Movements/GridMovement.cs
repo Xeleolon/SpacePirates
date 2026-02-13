@@ -40,25 +40,25 @@ public class GridMovement : MonoBehaviour
         inMotion = true;
     }
 
+    public virtual void TargetUpdate(RoomIndex[] roomIndexRef)
+    {
+
+    }
+
     public bool HitCheck(RaycastHit2D hit)
             {
-                if (hit == null)
-                {
-                    //Debug.Log("hit = null");
-                    return false;
-                }
-                else if (hit.transform == null)
+                if (hit.transform == null)
                 {
                     //Debug.Log("hit but no object actacted");
                     return false;
                 }
                 else if (hit.transform.gameObject.tag == wall || hit.transform.gameObject.tag == "Player")
                 {
-                    Debug.Log("succesful hit " + hit.transform.gameObject.name);
+                    //Debug.Log("succesful hit " + hit.transform.gameObject.name);
                     return true; 
                 }
 
-               Debug.Log("hit " + hit.transform.gameObject.name);
+               //Debug.Log("hit " + hit.transform.gameObject.name);
 
                 return false;
             }

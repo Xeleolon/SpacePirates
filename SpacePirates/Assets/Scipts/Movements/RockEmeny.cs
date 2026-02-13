@@ -4,6 +4,7 @@ public class RockEmeny : GridMovement
 {
     public Transform targetplace;
     public bool targeting;
+    [SerializeField] RoomIndex currentRoom;
 
     [SerializeField] float rayCastRange = 1;
     [SerializeField] LayerMask nullAvoidance;
@@ -167,7 +168,7 @@ public class RockEmeny : GridMovement
             }
 
             
-        }
+    }
 
 
         float NegavtiveCheck(float negCheck)
@@ -178,4 +179,32 @@ public class RockEmeny : GridMovement
             }
             return negCheck;
         }
+
+    public override void TargetUpdate(RoomIndex[] roomIndexRef)
+    {
+        bool foundRoom = false;
+        for (int i = 0; i < roomIndexRef.Length; i++)
+        {
+            if (!foundRoom && roomIndexRef[i] != currentRoom)
+            {
+                foundRoom = true;
+                AssignTarget(roomIndexRef[i]);
+            }
+        }
+    }
+
+    public void AssignTarget(RoomIndex newRoom)
+    {
+        currentRoom = newRoom;
+        Breakable targetBreakable = currentRoom.CheckBreakableLists(Attractant.energy, transform.position);
+        
+        if (targetBreakable != null)
+        {
+            targetplace = targetBreakable.transform;
+        }
+        else
+        {
+            Debug.Log("No attracnct part of door");
+        }
+    }
 }
