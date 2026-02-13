@@ -89,8 +89,9 @@ public class LevelManager : MonoBehaviour
 
                 int highScorer = typeValues[eachDoor]; //set check as min orrginal door
                 int placement = eachDoor; //get placement form orignal door
+                Debug.Log("door " + eachDoor + " placement = " + placement + " score of " + highScorer);
 
-                
+
 
                 //find door highvalue
                 for (int highScoreLoop = 0; highScoreLoop < loopCopyOfTypeValues.Length; highScoreLoop++)
@@ -108,8 +109,8 @@ public class LevelManager : MonoBehaviour
                 }
 
 
-                
-                
+
+                Debug.Log("door " + eachDoor + " placement = " + placement + " score of " + highScorer);
                 if (eachDoor != placement) //don't do anything if door = placement data allready set
                 {
                     int[] neighbouringDoors = allDoors[eachDoor].neighbooringDoors;

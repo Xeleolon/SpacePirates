@@ -4488,13 +4488,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   wall: Wall
-  targetplace: {fileID: 2010080884}
-  targeting: 0
-  currentRoom: {fileID: 841927382}
-  rayCastRange: 1
+  rayCastRangeGrid: 1
   nullAvoidance:
     serializedVersion: 2
     m_Bits: 55
+  targetplace: {fileID: 2010080884}
+  targeting: 0
+  currentRoom: {fileID: 841927382}
+  rayCastRange: 1.5
 --- !u!114 &773624762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6683,7 +6684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1039880632
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6771,6 +6772,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   wall: 
+  rayCastRangeGrid: 0.1
+  nullAvoidance:
+    serializedVersion: 2
+    m_Bits: 0
   health: 4
   inputGive: 0.5
 --- !u!50 &1039880635
@@ -11506,7 +11511,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1890384869
 Rigidbody2D:
   serializedVersion: 5
@@ -11667,11 +11672,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   wall: Wall
-  movePause: 1
-  rayCastRange: 1
+  rayCastRangeGrid: 1
   nullAvoidance:
     serializedVersion: 2
     m_Bits: 55
+  movePause: 1
+  rayCastRange: 1
   playerDamage: 1
   breakableDamage: 1
   stepMovement: 0

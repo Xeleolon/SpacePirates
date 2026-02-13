@@ -5,7 +5,6 @@ public class SlimeEmenyGridBase : GridMovement
     [SerializeField] float movePause = 1;
     float movementHoldClock = 0;
     [SerializeField] float rayCastRange = 1;
-    [SerializeField] LayerMask nullAvoidance;
 
     [Header("Damage")]
     [SerializeField] int playerDamage = 1;
@@ -15,9 +14,7 @@ public class SlimeEmenyGridBase : GridMovement
 
     bool damage;
 
-    void Start()
-    {
-    }
+    
     int[] availableDirection = new int[0];
     RaycastHit2D[] hit = new RaycastHit2D[4];
     private void Update()

@@ -7,7 +7,6 @@ public class RockEmeny : GridMovement
     [SerializeField] RoomIndex currentRoom;
 
     [SerializeField] float rayCastRange = 1;
-    [SerializeField] LayerMask nullAvoidance;
 
     bool actacking = false;
 
@@ -32,6 +31,12 @@ public class RockEmeny : GridMovement
         {
             if(!UpdateMove())
             {
+                /*
+                if (targeting)
+                {
+                    PickMove();
+                }
+                */
                 PickMove();
             }
             //PickMove();
@@ -110,11 +115,12 @@ public class RockEmeny : GridMovement
                 else
                 {
                     leftRightDirection = LeftRight();
+                    //Debug.Log("Left and Right and providing direction " + leftRightDirection);
 
                     Xhit = Physics2D.Raycast(transform.position, leftRightDirection, rayCastRange, nullAvoidance);
                     if (!HitCheck(Xhit))
                     {
-                        direction = UpDownDirection;
+                        direction = leftRightDirection;
                     }
                     else
                     {
