@@ -15,6 +15,7 @@ public class RockEmeny : GridMovement
     // Update is called once per frame
     void Start()
     {
+        AssignTarget(currentRoom);
         PickMove();
     }
     void Update()
@@ -189,11 +190,14 @@ public class RockEmeny : GridMovement
     public override void TargetUpdate(RoomIndex[] roomIndexRef)
     {
         bool foundRoom = false;
+        //Debug.Log("enter new room");
         for (int i = 0; i < roomIndexRef.Length; i++)
         {
+            //Debug.Log("room Check" + i);
             if (!foundRoom && roomIndexRef[i] != currentRoom)
             {
                 foundRoom = true;
+                //Debug.Log("found room" + i);
                 AssignTarget(roomIndexRef[i]);
             }
         }
@@ -202,7 +206,7 @@ public class RockEmeny : GridMovement
     public void AssignTarget(RoomIndex newRoom)
     {
         currentRoom = newRoom;
-        Breakable targetBreakable = currentRoom.CheckBreakableLists(Attractant.energy, transform.position);
+        Breakable targetBreakable = currentRoom.CheckBreakableLists(Attractant.energy, transform.position, false);
         
         if (targetBreakable != null)
         {

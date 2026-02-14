@@ -11,6 +11,7 @@ public class Doorway : Breakable
     public Breakable energyTarget;
     [SerializeField] string emenyTag;
     [SerializeField] string playerTag;
+    [SerializeField] int StandardSubtraction = 1;
     public void GetScore()
     {
         if (roomsReffences == null || roomsReffences.Length <= 0)
@@ -23,7 +24,7 @@ public class Doorway : Breakable
         for (int i = 0; i < roomsReffences.Length; i++)
         {
             //Enegery
-            Breakable tempTarget = roomsReffences[i].CheckBreakableLists(Attractant.energy, transform.position);
+            Breakable tempTarget = roomsReffences[i].CheckBreakableLists(Attractant.energy, transform.position, true);
             if (tempTarget != null)
             {
                 if (energyActractive < tempTarget.energyActractive)
@@ -36,6 +37,7 @@ public class Doorway : Breakable
                     energyActractive = tempTarget.energyActractive;
                     energyTarget = tempTarget;
                 }
+                //Debug.Log(gameObject.name + " has a break able of " + tempTarget + " with a score of " + energyActractive);
             }
         }
 
@@ -48,7 +50,7 @@ public class Doorway : Breakable
         {
             case Attractant.energy:
                 energyTarget = target;
-                energyActractive = targetActractiveness;
+                energyActractive = targetActractiveness - StandardSubtraction;
                 break;
 
             default:

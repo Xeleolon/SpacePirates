@@ -87,7 +87,7 @@ public class GridMovement : MonoBehaviour
         inputDirection = input;
         lastTarget = target;
         target = new Vector3(transform.position.x + input.x, transform.position.y + input.y, transform.position.z);
-        Debug.Log(gameObject.name + " direction = " + target);
+        //Debug.Log(gameObject.name + " direction = " + target);
         inMotion = true;
     }
 

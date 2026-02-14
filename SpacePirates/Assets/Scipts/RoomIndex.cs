@@ -7,6 +7,7 @@ public class RoomIndex : MonoBehaviour
     [SerializeField] Breakable[] doors;
 
     private Breakable[] energy;
+    private int numberOfCAlls;
 
 
     #region generate Breakable Lists
@@ -62,8 +63,9 @@ public class RoomIndex : MonoBehaviour
     }
     #endregion
 
-    public Breakable CheckBreakableLists(Attractant type, Vector3 location) //return close object ot provide object of attranct type
+    public Breakable CheckBreakableLists(Attractant type, Vector3 location, bool nullifyDoors) //return close object ot provide object of attranct type
     {
+        numberOfCAlls += 1;
         switch (type)
         {
             case Attractant.energy:
@@ -89,7 +91,7 @@ public class RoomIndex : MonoBehaviour
             for (int i = 0; i < checkthis.Length; i++)
             {
                 float distanceModifier= Vector3.Distance(checkthis[i].transform.position, location);
-                distanceModifier = distanceModifier / 100;
+                distanceModifier = 1 - (distanceModifier / 100);
                 int checkValue = 0;
 
                 switch(type)
@@ -99,15 +101,21 @@ public class RoomIndex : MonoBehaviour
                         checkValue = checkthis[i].energyActractive;
                         break;
                     default:
-                        checkValue = 0;
                         Debug.LogWarning(type + " is checking through default set up code line for correct value");
                         break;
 
                 }
-                if ((checkValue + distanceModifier) > valueTarget);
+
+                if (nullifyDoors && checkthis[i].GetComponent<Doorway>() != null)
+                {
+                    checkValue = 0;
+                }
+
+                if ((checkValue + distanceModifier) > valueTarget)
                 {
                     placementTarget = i;
                     valueTarget = checkValue + distanceModifier;
+                    //Debug.Log("call" + numberOfCAlls + " " + gameObject.name + ", loop" + i + " produces valueTarget of " + valueTarget + " distanceModifier = " + distanceModifier);
                 }
 
             }

@@ -53,6 +53,11 @@ public class LevelManager : MonoBehaviour
             for (int eachDoor = 0; eachDoor < allDoors.Length; eachDoor++) //create a list of all available doors with their values
             {
                 int[] loopCopyOfTypeValues = new int[typeValues.Length];
+
+                int highScorer = typeBreakable[eachDoor].GiveValue(type); //set check as min orrginal door
+                //Debug.Log("door " + eachDoor + " score of " + highScorer);
+
+
                 for (int copyArraryLoop = 0; copyArraryLoop < typeValues.Length; copyArraryLoop ++)
                 {
                     loopCopyOfTypeValues[copyArraryLoop] = typeValues[copyArraryLoop];
@@ -87,9 +92,9 @@ public class LevelManager : MonoBehaviour
                 }
 
 
-                int highScorer = typeValues[eachDoor]; //set check as min orrginal door
+                //int highScorer = typeValues[eachDoor]; //set check as min orrginal door
                 int placement = eachDoor; //get placement form orignal door
-                Debug.Log("door " + eachDoor + " placement = " + placement + " score of " + highScorer);
+                //Debug.Log("door " + eachDoor + " placement = " + placement + " score of " + highScorer);
 
 
 
@@ -110,13 +115,13 @@ public class LevelManager : MonoBehaviour
 
 
 
-                Debug.Log("door " + eachDoor + " placement = " + placement + " score of " + highScorer);
+                //Debug.Log("door " + eachDoor + " placement = " + placement + " score of " + highScorer);
                 if (eachDoor != placement) //don't do anything if door = placement data allready set
                 {
                     int[] neighbouringDoors = allDoors[eachDoor].neighbooringDoors;
                     if (neighbouringDoors[placement] == 1) //asign target door if it direct neighbour already
                     {
-                        allDoors[eachDoor].AsisgnTarget(type, allDoors[placement], typeValues[placement]);
+                        allDoors[eachDoor].AsisgnTarget(type, allDoors[placement], typeValues[placement] - (neighbouringDoors[placement] * sensorDeperation));
                     }
                     else //isn't a neighbouring door find the door closest to final target
                     {
@@ -140,6 +145,10 @@ public class LevelManager : MonoBehaviour
                         }
                         return placeOfTargetValue;
                     }
+                }
+                else
+                {
+                    allDoors[eachDoor].AsisgnTarget(type, allDoors[placement], highScorer);
                 }
                 
 
