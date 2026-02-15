@@ -135,29 +135,29 @@ public class Player : GridMovement
             if (directionLeftRight == Vector2.zero && directionUpDown != Vector2.zero)
             {
                 moveTowards(directionUpDown);
-                Debug.Log("input Up");
+                //Debug.Log("input Up");
             }
             else if (directionUpDown == Vector2.zero && directionLeftRight != Vector2.zero)
             {
                 moveTowards(directionLeftRight);
-                Debug.Log("input side");
+                //Debug.Log("input side");
             }
             else if (directionUpDown != Vector2.zero && directionLeftRight != Vector2.zero)
             {
                 if (Random.Range(0,1) > 0.5f)
                 {
                     moveTowards(directionLeftRight);
-                    Debug.Log("booth input picked side");
+                    //Debug.Log("booth input picked side");
                 }
                 else
                 {
                     moveTowards(directionUpDown);
-                    Debug.Log("booth input picked up");
+                    //Debug.Log("booth input picked up");
                 }
             }
             else
             {
-                Debug.Log("No Movement");
+                //Debug.Log("No Movement");
             }
         }
 

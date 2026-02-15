@@ -8,7 +8,15 @@ public class RockEmeny : GridMovement
 
     [SerializeField] float rayCastRange = 1;
 
-    bool actacking = false;
+    [Header("Actacking")]
+    [SerializeField] int damage = 1;
+    [SerializeField] float actackRayRange = 1;
+
+    [SerializeField] float actackFrequence = 1;
+    private float actackClock;
+    //private float storagedEnergy;
+ 
+    ActackType actacking = ActackType.none;
 
 
 
@@ -20,56 +28,195 @@ public class RockEmeny : GridMovement
     }
     void Update()
     {
-    
-        
-        //moveTowards(direction);
-        /*if (UpdateMove())
-        {
-            targeting = false;
-        }*/
 
-        if (!actacking)
+        
+        switch (actacking)
         {
-            if(!UpdateMove())
-            {
-                /*
-                if (targeting)
+            case ActackType.none:
+                if (!UpdateMove())
+                {
+                    /*
+                    if (targeting)
+                    {
+                        PickMove();
+                    }
+                    */
+                    PickMove();
+                }
+                break;
+            case ActackType.huntPlayer:
+                if (!UpdateMove())
                 {
                     PickMove();
                 }
-                */
-                PickMove();
-            }
-            //PickMove();
+                Actack();
+                break;
+            case ActackType.contiuneTillDead:
+                Actack();
+                break;
+            case ActackType.strike:
+                Actack();
+                break;
         }
         
+        if (actackClock > 0)
+        {
+            actackClock -= 1 * Time.deltaTime;
+        }
+
+
     }
 
-    void Actack(RaycastHit2D hit)
+    void Actack()
     {
-        Debug.Log("actacking " + hit);
+        if (actackClock > 0)
+        {
+            return;
+        }
+
+        RaycastHit2D actackHit = Physics2D.Raycast(transform.position, RayDirection(), rayCastRange, nullAvoidance);
+
+        if (actackHit.transform.gameObject.tag == "Player")
+        {
+            Player player = actackHit.transform.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                player.AlterHealth(-damage);
+                ActackSuccess();
+            }
+        }
+        else if (actackHit.transform.gameObject.tag == "Breakable")
+        {
+            Breakable breakable = actackHit.transform.gameObject.GetComponent<Breakable>();
+            if (breakable != null)
+            {
+                breakable.AlterHealth(-damage);
+                ActackSuccess();
+            }
+        }
+
+        void ActackSuccess()
+        {
+            if (actacking == ActackType.strike)
+            {
+                actacking = ActackType.none;
+            }
+            Debug.Log("Actacking " + actackHit.transform.gameObject.name);
+
+            actackClock = actackFrequence;
+        }
+
+        Vector2 RayDirection()
+        {
+            switch (inputDirection)
+            {
+                case MovementDirection.up:
+                    return Vector2.up;
+                case MovementDirection.down:
+                    return Vector2.down;
+                case MovementDirection.right:
+                    return Vector2.right;
+                case MovementDirection.left:
+                    return Vector2.left;
+            }
+            return Vector2.zero;
+        }
+    }
+    public override bool CallActack(GameObject collisionObject)
+    {
+        if (collisionObject.tag == "Player")
+        {
+            actacking = ActackType.huntPlayer;
+            return false;
+        }
+        Breakable targetBreakable = collisionObject.GetComponent<Breakable>();
+        if (targetBreakable != null)
+        {
+            if (collisionObject.transform == targetplace)
+            {
+                actacking = ActackType.contiuneTillDead;
+                return true;
+            }
+            else
+            {
+                actacking = ActackType.strike;
+            }
+        }
+        return false;
     }
 
     void PickMove()
     {
         Vector2 direction = Vector2.zero;
-            if (targetplace == null)
+        if (targetplace == null)
+        {
+            targeting = false;
+            return;
+        }
+        float Xdifferntial = NegavtiveCheck(targetplace.position.x - transform.position.x);
+        float Ydifferntial = NegavtiveCheck(targetplace.position.y - transform.position.y);
+
+        RaycastHit2D Xhit;
+        RaycastHit2D Yhit;
+        Vector2 UpDownDirection = Vector2.zero;
+        Vector2 leftRightDirection = Vector2.zero;
+
+        if (Xdifferntial >= Ydifferntial)
+        {
+
+            leftRightDirection = LeftRight();
+
+            Xhit = Physics2D.Raycast(transform.position, leftRightDirection, rayCastRange, nullAvoidance);
+            if (!HitCheck(Xhit))
             {
-                targeting = false;
-                return;
+                direction = leftRightDirection;
             }
-            float Xdifferntial = NegavtiveCheck(targetplace.position.x - transform.position.x);
-            float Ydifferntial = NegavtiveCheck(targetplace.position.y - transform.position.y);
-
-            RaycastHit2D Xhit;
-            RaycastHit2D Yhit;
-            Vector2 UpDownDirection = Vector2.zero;
-            Vector2 leftRightDirection = Vector2.zero;
-
-            if (Xdifferntial >= Ydifferntial)
+            else
             {
-                
+
+                UpDownDirection = UpDown();
+                Yhit = Physics2D.Raycast(transform.position, UpDownDirection, rayCastRange, nullAvoidance);
+                if (!HitCheck(Yhit))
+                {
+                    direction = UpDownDirection;
+                }
+                else
+                {
+                    float varRandom = Random.Range(0, 1);
+
+                    if (actacking == ActackType.none)
+                    {
+                        actacking = ActackType.strike;
+                    }
+
+                    targeting = false;
+                    if (varRandom > 0.5f)
+                    {
+                        Actack();
+                    }
+                    else
+                    {
+                        Actack();
+                    }
+                }
+            }
+        }
+        else if (Xdifferntial < Ydifferntial)
+        {
+            //Debug.Log("moving up or down");
+
+
+            UpDownDirection = UpDown();
+            Yhit = Physics2D.Raycast(transform.position, UpDownDirection, rayCastRange, nullAvoidance);
+            if (!HitCheck(Yhit))
+            {
+                //Debug.Log("Moving up/down and providing direction " + UpDownDirection);
+                direction = UpDownDirection;
+            }
+            else
+            {
                 leftRightDirection = LeftRight();
+                //Debug.Log("Left and Right and providing direction " + leftRightDirection);
 
                 Xhit = Physics2D.Raycast(transform.position, leftRightDirection, rayCastRange, nullAvoidance);
                 if (!HitCheck(Xhit))
@@ -78,103 +225,61 @@ public class RockEmeny : GridMovement
                 }
                 else
                 {
-                    
-                    UpDownDirection = UpDown();
-                    Yhit = Physics2D.Raycast(transform.position, UpDownDirection, rayCastRange, nullAvoidance);
-                    if (!HitCheck(Yhit))
+                    float varRandom = Random.Range(0, 1);
+
+                    if (actacking == ActackType.none)
                     {
-                        direction = UpDownDirection;
+                        actacking = ActackType.strike;
+                    }
+
+                    targeting = false;
+                    if (varRandom > 0.5f)
+                    {
+                        Actack();
+
                     }
                     else
                     {
-                        float varRandom = Random.Range(0,1);
-                        actacking = true;
-                        targeting = false;
-                        if (varRandom > 0.5f)
-                        {
-                            Actack(Xhit);
-                        }
-                        else
-                        {
-                            Actack(Yhit);
-                        }
+                        Actack();
                     }
                 }
             }
-            else if (Xdifferntial < Ydifferntial)
+        }
+
+        if (actacking == ActackType.none)
+        {
+            targeting = false;
+            moveTowards(direction);
+        }
+
+
+        Vector2 UpDown()
+        {
+            if (targetplace.position.y == transform.position.y)
             {
-                //Debug.Log("moving up or down");
-                
-                
-                UpDownDirection = UpDown();
-                Yhit = Physics2D.Raycast(transform.position, UpDownDirection, rayCastRange, nullAvoidance);
-                if (!HitCheck(Yhit))
-                {
-                    //Debug.Log("Moving up/down and providing direction " + UpDownDirection);
-                    direction = UpDownDirection;
-                }
-                else
-                {
-                    leftRightDirection = LeftRight();
-                    //Debug.Log("Left and Right and providing direction " + leftRightDirection);
-
-                    Xhit = Physics2D.Raycast(transform.position, leftRightDirection, rayCastRange, nullAvoidance);
-                    if (!HitCheck(Xhit))
-                    {
-                        direction = leftRightDirection;
-                    }
-                    else
-                    {
-                        float varRandom = Random.Range(0,1);
-                        actacking = true;
-                        targeting = false;
-                        if (varRandom > 0.5f)
-                        {
-                            Actack(Xhit);
-                            
-                        }
-                        else
-                        {
-                            Actack(Yhit);
-                        }
-                    }
-                }
+                return Vector2.zero;
             }
-
-            if (!actacking)
+            else if (targetplace.position.y > transform.position.y)
             {
-                targeting = false;
-                moveTowards(direction);
+                return Vector2.up;
             }
+            return Vector2.down;
+        }
 
-
-            Vector2 UpDown()
+        Vector2 LeftRight()
+        {
+            if (targetplace.position.x == transform.position.x)
             {
-                if (targetplace.position.y == transform.position.y)
-                {
-                    return Vector2.zero;
-                }
-                else if (targetplace.position.y > transform.position.y)
-                {
-                    return Vector2.up;
-                }
-                    return Vector2.down;
+                return Vector2.zero;
             }
-
-            Vector2 LeftRight()
+            else if (targetplace.position.x > transform.position.x)
             {
-                if (targetplace.position.x == transform.position.x)
-                {
-                    return Vector2.zero;
-                }
-                else if (targetplace.position.x > transform.position.x)
-                {
-                    return Vector2.right;
-                }
-                    return Vector2.left;
+                return Vector2.right;
             }
+            return Vector2.left;
+        }
 
-            
+
     }
 
 

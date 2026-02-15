@@ -17,8 +17,12 @@ public class Breakable : MonoBehaviour
         currentHeath = health;
     }
     
-    public void AlterHealth(float alter)
+    public bool AlterHealth(float alter)
     {
+        if (currentHeath <= 0)
+        {
+            return false;
+        }
         currentHeath += alter;
 
         if (currentHeath >= health)
@@ -40,6 +44,7 @@ public class Breakable : MonoBehaviour
                 broken = false;
             }
         }
+        return true;
     }
 
     public bool CheckAttractanctMatch(Attractant matchCheck)
