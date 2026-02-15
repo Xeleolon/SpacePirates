@@ -4,7 +4,7 @@ public class GridMovement : MonoBehaviour
 {
     [SerializeField] float speed = 5;
     
-    [SerializeField] string wall;
+    [SerializeField] string[] raycastTagIngore;
     [SerializeField] float rayCastRangeGrid = 1;
     public LayerMask nullAvoidance;
 
@@ -103,14 +103,35 @@ public class GridMovement : MonoBehaviour
             //Debug.Log("hit but no object actacted " + hit);
             return false;
         }
-        else if (hit.transform.gameObject.tag == wall || hit.transform.gameObject.tag == "Player")
+        else if (checkTag(hit.transform.gameObject.tag))
         {
             //Debug.Log("succesful hit " + hit.transform.gameObject.name);
             return true;
         }
 
+
+        
+
         //Debug.Log("hit " + hit.transform.gameObject.name);
 
         return false;
+
+        bool checkTag(string tag)
+        {
+            if (raycastTagIngore.Length <= 0)
+            {
+                return false;
+            }
+
+            for (int tagCheckLoop = 0; tagCheckLoop < raycastTagIngore.Length; tagCheckLoop++)
+            {
+                if (raycastTagIngore[tagCheckLoop] == tag)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -61,6 +61,7 @@ public class Player : GridMovement
 
     [SerializeField] int health = 10;
     [SerializeField] float inputGive = 0.5f;
+    [SerializeField] float raycastRange = 1;
     int curHealth;
 
     
@@ -90,26 +91,74 @@ public class Player : GridMovement
             animator.SetFloat("Vertical", input.y);
             animator.SetFloat("Speed", input.sqrMagnitude);
 
-            Vector2 direction = Vector2.zero;
+            Vector2 directionLeftRight = Vector2.zero;
+            Vector2 directionUpDown = Vector2.zero;
+            
             if (input.x >= inputGive)
             {
-                direction = Vector2.right;
+                directionLeftRight = Vector2.right;
             }
             else if (input.x <= -inputGive)
             {
-                direction = Vector2.left;
+                directionLeftRight = Vector2.left;
             }
 
             if (input.y >= inputGive)
             {
-                direction = Vector2.up;
+                directionUpDown = Vector2.up;
             }
             else if (input.y <= -inputGive)
             {
-                direction = Vector2.down;
+                directionUpDown = Vector2.down;
             }
 
-            moveTowards(direction);
+            //check if can move in that direction
+            if (directionLeftRight != Vector2.zero)
+            {
+                RaycastHit2D hitLeftRight = Physics2D.Raycast(transform.position, directionLeftRight, raycastRange, nullAvoidance);
+                if (HitCheck(hitLeftRight))
+                {
+                    directionLeftRight = Vector2.zero;
+                }
+            }
+
+            if (directionUpDown != Vector2.zero)
+            {
+                RaycastHit2D hitUpDown = Physics2D.Raycast(transform.position, directionUpDown, raycastRange, nullAvoidance);
+                if (HitCheck(hitUpDown))
+                {
+                    directionUpDown = Vector2.zero;
+                }
+            }
+
+
+            if (directionLeftRight == Vector2.zero && directionUpDown != Vector2.zero)
+            {
+                moveTowards(directionUpDown);
+                Debug.Log("input Up");
+            }
+            else if (directionUpDown == Vector2.zero && directionLeftRight != Vector2.zero)
+            {
+                moveTowards(directionLeftRight);
+                Debug.Log("input side");
+            }
+            else if (directionUpDown != Vector2.zero && directionLeftRight != Vector2.zero)
+            {
+                if (Random.Range(0,1) > 0.5f)
+                {
+                    moveTowards(directionLeftRight);
+                    Debug.Log("booth input picked side");
+                }
+                else
+                {
+                    moveTowards(directionUpDown);
+                    Debug.Log("booth input picked up");
+                }
+            }
+            else
+            {
+                Debug.Log("No Movement");
+            }
         }
 
         

@@ -923,7 +923,7 @@ GameObject:
   m_Component:
   - component: {fileID: 103877364}
   - component: {fileID: 103877365}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1035,7 +1035,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  wall: Wall
+  raycastTagIngore:
+  - Wall
+  - Player
   rayCastRangeGrid: 1
   nullAvoidance:
     serializedVersion: 2
@@ -2561,7 +2563,7 @@ GameObject:
   - component: {fileID: 424805048}
   m_Layer: 0
   m_Name: Battery5
-  m_TagString: Untagged
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3699,7 +3701,7 @@ GameObject:
   - component: {fileID: 630928003}
   m_Layer: 0
   m_Name: Battery3
-  m_TagString: Wall
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3899,7 +3901,7 @@ GameObject:
   - component: {fileID: 681080991}
   m_Layer: 0
   m_Name: Battery4
-  m_TagString: Untagged
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4677,7 +4679,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  wall: Wall
+  raycastTagIngore:
+  - Wall
+  - Player
   rayCastRangeGrid: 1
   nullAvoidance:
     serializedVersion: 2
@@ -5036,7 +5040,7 @@ GameObject:
   - component: {fileID: 808469044}
   m_Layer: 0
   m_Name: Battery6
-  m_TagString: Untagged
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6253,7 +6257,7 @@ GameObject:
   - component: {fileID: 935568365}
   - component: {fileID: 935568366}
   - component: {fileID: 935568367}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grapple
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -6870,13 +6874,13 @@ GameObject:
   - component: {fileID: 1039880635}
   - component: {fileID: 1039880634}
   - component: {fileID: 1039880637}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1039880632
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6941,7 +6945,7 @@ Transform:
   m_GameObject: {fileID: 1039880631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -6, z: 0}
+  m_LocalPosition: {x: -1, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6963,13 +6967,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  wall: 
+  raycastTagIngore:
+  - Wall
+  - Emeny
+  - Breakable
   rayCastRangeGrid: 0.1
   nullAvoidance:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 247
   health: 4
   inputGive: 0.5
+  raycastRange: 0.5
 --- !u!50 &1039880635
 Rigidbody2D:
   serializedVersion: 5
@@ -8148,7 +8156,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1278861049}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GrappleHome
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -8718,7 +8726,7 @@ GameObject:
   - component: {fileID: 1416316983}
   m_Layer: 0
   m_Name: EngineBreakable
-  m_TagString: Untagged
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11214,7 +11222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1794012070}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GrappleComponet
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -11426,7 +11434,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  wall: Wall
+  raycastTagIngore:
+  - Wall
+  - Player
   rayCastRangeGrid: 1
   nullAvoidance:
     serializedVersion: 2
@@ -11894,7 +11904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1890384869
 Rigidbody2D:
   serializedVersion: 5
@@ -12054,7 +12064,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  wall: Wall
+  raycastTagIngore:
+  - Wall
+  - Player
   rayCastRangeGrid: 1
   nullAvoidance:
     serializedVersion: 2
@@ -12463,7 +12475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1947537093}
   - component: {fileID: 1947537094}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13272,7 +13284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2039037592}
   - component: {fileID: 2039037593}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13443,7 +13455,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2099647104}
   - component: {fileID: 2099647105}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grapple Handle
   m_TagString: Player
   m_Icon: {fileID: 0}
