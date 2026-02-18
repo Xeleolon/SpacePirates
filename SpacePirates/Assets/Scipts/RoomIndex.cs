@@ -8,15 +8,22 @@ public class RoomIndex : MonoBehaviour
 
     private Breakable[] energy;
     private int numberOfCAlls;
+    [HideInInspector] public int TotalHealth;
+    private bool loopOnced;
 
 
     #region generate Breakable Lists
     public bool SetBreakableLists()
     {
-
+        TotalHealth = 0;
         Breakable[] allBreakables = CompleteAllBreakable();
         energy = BreakableObject(Attractant.energy);
 
+        if (!loopOnced)
+        {
+            LevelUIControl.instance.SetRoomHealth(this, TotalHealth);
+        }
+        loopOnced = true;
         return true;
 
         Breakable[] BreakableObject(Attractant type)
@@ -52,6 +59,13 @@ public class RoomIndex : MonoBehaviour
             for (int i = 0; i < avalableBreakable.Length; i++)
             {
                 tempStorage[i] = avalableBreakable[i];
+             
+                TotalHealth += tempStorage[i].health;
+
+                if (!loopOnced)
+                {
+                    tempStorage[i].SetRoom(this);
+                }
             }
 
             for (int i = 0; i < doors.Length; i++)

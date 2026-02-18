@@ -7,9 +7,10 @@ public class RoomData
     [HideInInspector]
     public string fontName;
     public RoomIndex roomIndex;
-    private int systemsHealth = 1;
-    private int damageSystems = 0;
+    private int systemsHealth;
+    private int damageSystems;
     public Image damageIcon;
+    #region systemname
 
     private bool nameSet;
     public bool setName
@@ -39,26 +40,29 @@ public class RoomData
             fontName = roomIndex.name;
         }
     }
+    #endregion
+
     public void SetSystems(int health)
     {
         systemsHealth = health;
         damageSystems = systemsHealth;
     }
-    public bool DamageSystem(int damage)
+    public float DamageSystem(int damage)
     {
         damageSystems += damage;
 
         if (damageSystems <= 0 )
         {
             damageSystems = 0;
-            return false;
+            
         }
         else if (damageSystems > systemsHealth)
         {
             damageSystems = systemsHealth;
         }
-
-        return true;
+        float percent = damageSystems;
+        float Whole = systemsHealth;
+        return percent / Whole;
     }
     
 

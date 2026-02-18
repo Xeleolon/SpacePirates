@@ -35,8 +35,10 @@ public class LevelUIControl : MonoBehaviour
     [Header("Room Damage")]
     [SerializeField] RoomData[] shipRooms;
     [SerializeField] Color roomUnDamaged;
-    [SerializeField] Color roomDamaged;
+    [SerializeField] Gradient roomDamaged;
     [SerializeField] Color roomDead;
+    private int availableRooms;
+    private int damagedroom;
 
     [Header("HealthUI")]
     [SerializeField] Transform healthBarParent;
@@ -59,7 +61,7 @@ public class LevelUIControl : MonoBehaviour
         }
     }
 
-
+    
 
 
     private void Update()
@@ -102,6 +104,7 @@ public class LevelUIControl : MonoBehaviour
             respawnNumbers.SetText(tempClock.ToString());
         }
     }
+    #region PlayerHealthAlternation
     public void ChangeHeath(int healthToken)
     {
         Debug.Log("test cool" + healthToken);
@@ -150,6 +153,61 @@ public class LevelUIControl : MonoBehaviour
         if (!player.activeSelf)
         {
             player.SetActive(true);
+        }
+    }
+    #endregion
+
+    public void SetRoomHealth(RoomIndex room, int totalHealth)
+    {
+        for (int roomLoop = 0; roomLoop < shipRooms.Length; roomLoop++)
+        {
+            if (shipRooms[roomLoop].roomIndex == room)
+            {
+                shipRooms[roomLoop].SetSystems(totalHealth);
+                shipRooms[roomLoop].damageIcon.color = roomUnDamaged;
+
+                if (totalHealth > 0)
+                {
+                    availableRooms += 1;
+                    damagedroom += 1;
+                }
+                return;
+            }
+        }
+    }
+    public void RoomDamage(RoomIndex room, int damage)
+    {
+        if (shipRooms.Length == 0)
+        {
+            Debug.LogWarning("No Ship Room assigned to UI");
+            return;
+        }
+        for (int roomLoop = 0; roomLoop < shipRooms.Length; roomLoop ++)
+        {
+            if (shipRooms[roomLoop].roomIndex == room)
+            {
+                float damagePercent = shipRooms[roomLoop].DamageSystem(damage);
+                //Debug.Log("room " + (roomLoop + 1) + " has a damage percent of " + damagePercent);
+                if (damagePercent <= 0)
+                {
+                    shipRooms[roomLoop].damageIcon.color = roomDead;
+                    damagedroom -= 1;
+
+                    if (damagedroom <= 0)
+                    {
+                        Debug.Log("GameOver");
+                    }
+                }
+                else if (damagePercent >= 1)
+                {
+                    shipRooms[roomLoop].damageIcon.color = roomUnDamaged;
+                }
+                else
+                {
+                    shipRooms[roomLoop].damageIcon.color = roomDamaged.Evaluate(damagePercent);
+                }
+                return;
+            }
         }
     }
 

@@ -2,28 +2,35 @@ using UnityEngine;
 public class Breakable : MonoBehaviour
 {
 
-    [SerializeField] float health = 1;
+    public int health = 1;
     public Attractant[] attractant;
     [Range(0,10)]
     public int energyActractive = 0;
-    float currentHeath;
+    int currentHeath;
     //Sprite[] sprite;
 
     bool broken = false;
     bool damage = false;
+    RoomIndex currentRoom;
 
     void Start()
     {
         currentHeath = health;
     }
-    
-    public bool AlterHealth(float alter)
+    public void SetRoom(RoomIndex newRoom)
     {
+        currentRoom = newRoom;
+    }
+    
+    public bool AlterHealth(int alter)
+    {
+        LevelUIControl.instance.RoomDamage(currentRoom, alter);
         if (currentHeath <= 0)
         {
             return false;
         }
         currentHeath += alter;
+        
 
         if (currentHeath >= health)
         {
