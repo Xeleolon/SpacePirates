@@ -9,6 +9,8 @@ public class SlimeEmenyGridBase : GridMovement
     [Header("Damage")]
     [SerializeField] int playerDamage = 1;
     [SerializeField] int breakableDamage = 1;
+    [SerializeField] float actackFrequence = 1;
+    private float actackCloak;
 
     public bool stepMovement = false;
 
@@ -22,6 +24,11 @@ public class SlimeEmenyGridBase : GridMovement
         if (!UpdateMove() /*&& stepMovement*/)
         {
             RandomMovment();
+        }
+
+        if (actackCloak > 0)
+        {
+            actackCloak -= 1 * Time.deltaTime;
         }
         
         void RandomMovment()
@@ -125,6 +132,11 @@ public class SlimeEmenyGridBase : GridMovement
 
     void Actack(GameObject actackObject)
     {
+        if (actackCloak > 0)
+        {
+            return;
+        }
+
         if (actackObject.tag == "Player")
         {
             //damage Player;
@@ -152,9 +164,34 @@ public class SlimeEmenyGridBase : GridMovement
                 Debug.LogError("Breakable object " + actackObject.name + " does not have a Breakable Script acttached");
             }
         }
+
+        actackCloak = actackFrequence;
     }
 
-    
+    public override bool CallActack(GameObject collisionObject)
+    {
+        if (collisionObject.tag == "Player")
+        {
+            Actack(collisionObject);
+            return false;
+        }
+        Breakable targetBreakable = collisionObject.GetComponent<Breakable>();
+        if (targetBreakable != null)
+        {
+            if (collisionObject.transform == targetplace)
+            {
+                Actack(collisionObject);
+                return true;
+            }
+            else
+            {
+                Actack(collisionObject);
+            }
+        }
+        return false;
+    }
+
+
 
     /*void OnCollisionEnter2D(Collision2D other)
     {

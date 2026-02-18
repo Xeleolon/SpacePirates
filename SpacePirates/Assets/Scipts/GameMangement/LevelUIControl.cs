@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LevelUIControl : MonoBehaviour
 {
@@ -30,11 +31,33 @@ public class LevelUIControl : MonoBehaviour
     [SerializeField] Slider progressBar;
     [SerializeField] Gradient progressGradient;
     [SerializeField] Image progressFill;
+
     [Header("Room Damage")]
     [SerializeField] RoomData[] shipRooms;
+    [SerializeField] Color roomUnDamaged;
+    [SerializeField] Color roomDamaged;
+    [SerializeField] Color roomDead;
+
     [Header("HealthUI")]
     [SerializeField] Transform healthBarParent;
+    [SerializeField] GameObject statusAlive;
+    [SerializeField] TMP_Text respawnNumbers;
 
+    [Header("Respawn")]
+    [SerializeField] float respawnTime = 1;
+    private float respawnClock;
+    private GameObject player;
+
+    private void OnValidate()
+    {
+        if (shipRooms.Length <= 0)
+        {
+            for (int i = 0; i < shipRooms.Length; i++)
+            {
+                shipRooms[i].SetNames();
+            }
+        }
+    }
 
 
 
@@ -64,6 +87,20 @@ public class LevelUIControl : MonoBehaviour
 
 
         #endregion
+
+        if (respawnClock >= respawnTime)
+        {
+            if (player != null)
+            {
+                Respawn();
+            }
+        }
+        else
+        {
+            respawnClock += 1 * Time.deltaTime;
+            float tempClock = Mathf.Round((respawnTime - respawnClock) * 10) / 10;
+            respawnNumbers.SetText(tempClock.ToString());
+        }
     }
     public void ChangeHeath(int healthToken)
     {
@@ -80,6 +117,39 @@ public class LevelUIControl : MonoBehaviour
             {
                 changeToken.SetActive(true);
             }
+        }
+    }
+    public void PlayerDied(GameObject newPLayer)
+    {
+        if (player == null)
+        {
+            player = newPLayer;
+        }
+
+        respawnClock = 0;
+        respawnNumbers.SetText(respawnClock.ToString());
+        if (statusAlive.activeSelf)
+        {
+            statusAlive.SetActive(false);
+        }
+
+        if (player.activeSelf)
+        {
+            player.SetActive(false);
+        }
+
+    }
+
+    private void Respawn()
+    {
+        player.GetComponent<Player>().RespawnHealth();
+        if (!statusAlive.activeSelf)
+        {
+            statusAlive.SetActive(true);
+        }
+        if (!player.activeSelf)
+        {
+            player.SetActive(true);
         }
     }
 

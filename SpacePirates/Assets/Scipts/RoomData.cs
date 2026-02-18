@@ -4,32 +4,61 @@ using UnityEngine.UI;
 [System.Serializable]
 public class RoomData
 {
-    public string name;
-    [Tooltip("number of damage systems")]
-    public int systems = 1;
-    private int damagesystems = 0;
+    [HideInInspector]
+    public string fontName;
+    public RoomIndex roomIndex;
+    private int systemsHealth = 1;
+    private int damageSystems = 0;
     public Image damageIcon;
 
-    public void DamageSystem(bool damage)
+    private bool nameSet;
+    public bool setName
     {
-        if (damage)
+        get
         {
-            damagesystems += 1;
-            if (damagesystems > systems)
+            if (roomIndex != null)
             {
-                Debug.Log("Warning attemping to damage" + name + " more than " + systems + " ever add more systems or check if something is breaking more than once");
-                damagesystems = systems;
+                fontName = roomIndex.name;
             }
+            return nameSet;
         }
-        else
+        set
         {
-            damagesystems -= 1;
-            if (damagesystems < 0)
+            if (roomIndex != null)
             {
-                Debug.Log("Warning attemping to reapir " + name + " more than " + systems + " ever add more systems or check if something is reapairng more than once");
-                damagesystems = systems;
+                fontName = roomIndex.name;
             }
+            nameSet = value;
         }
+    }
+
+    public void SetNames()
+    {
+        if (roomIndex != null)
+        {
+            fontName = roomIndex.name;
+        }
+    }
+    public void SetSystems(int health)
+    {
+        systemsHealth = health;
+        damageSystems = systemsHealth;
+    }
+    public bool DamageSystem(int damage)
+    {
+        damageSystems += damage;
+
+        if (damageSystems <= 0 )
+        {
+            damageSystems = 0;
+            return false;
+        }
+        else if (damageSystems > systemsHealth)
+        {
+            damageSystems = systemsHealth;
+        }
+
+        return true;
     }
     
 

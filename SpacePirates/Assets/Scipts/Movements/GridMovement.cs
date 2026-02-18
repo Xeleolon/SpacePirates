@@ -7,6 +7,7 @@ public class GridMovement : MonoBehaviour
     [Header("CollisionChecks")]
     [SerializeField] string[] raycastTagIngore;
     [SerializeField] float rayCastRangeGrid = 1;
+    [Tooltip("commonly used for actacking through collision")]
     public LayerMask nullAvoidance;
     [SerializeField] float onCollisionDeviation = 0.2f;
     [SerializeField] string[] collisionTagAttack;
@@ -19,12 +20,22 @@ public class GridMovement : MonoBehaviour
     bool collisionWithWall;
     Vector3 target;
     Vector3 lastTarget;
+    [HideInInspector] public Vector3 spawn;
     [HideInInspector] public MovementDirection inputDirection;
+
+    public Transform targetplace;
+    Rigidbody2D rb;
+    public virtual void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
     #region Movement
     public bool UpdateMove()
     {
+        //movement
         if (returnToLastTarget)
         {
+            rb.linearVelocity = Vector2.zero;
             if (transform.position.x == lastTarget.x && transform.position.y == lastTarget.y)
             {
                 inMotion = false;
@@ -40,6 +51,7 @@ public class GridMovement : MonoBehaviour
         }
         else if (inMotion)
         {
+            rb.linearVelocity = Vector2.zero;
             if (transform.position.x == target.x && transform.position.y == target.y)
             {
                 inMotion = false;
@@ -59,9 +71,23 @@ public class GridMovement : MonoBehaviour
 
     public void moveTowards(Vector2 input)
     {
+
         inputDirection = InputToDirection(input);
-        lastTarget = target;
-        target = new Vector3(transform.position.x + input.x, transform.position.y + input.y, transform.position.z);
+        lastTarget = CheckTargets(target);
+        target = CheckTargets(new Vector3(transform.position.x + input.x, transform.position.y + input.y, transform.position.z));
+
+
+        //recallicutae returnToLastTarget and Target to be on grid only
+        Vector3 CheckTargets(Vector3 oldTarget)
+        {
+            Vector3 newTarget = oldTarget;
+            newTarget.x = Mathf.Round(oldTarget.x);
+            newTarget.y = Mathf.Round(oldTarget.y);
+
+
+            return newTarget;
+
+        }
         //Debug.Log(gameObject.name + " direction = " + target);
         inMotion = true;
 
@@ -70,6 +96,7 @@ public class GridMovement : MonoBehaviour
 
     public MovementDirection InputToDirection(Vector2 input)
     {
+        //Debug.Log("movment direction = " + input);
         if (input.x > 0)
         {
             return MovementDirection.right;
@@ -88,7 +115,8 @@ public class GridMovement : MonoBehaviour
             return MovementDirection.down;
         }
 
-        return MovementDirection.stop;
+        //return MovementDirection.stop;
+        return inputDirection;
     }
     #endregion
 
@@ -104,8 +132,9 @@ public class GridMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (inMotion && ForwardCheck())
+        if (inMotion)
         {
+
             if (CheckTag(collision.gameObject.tag, collisionTagAttack))
             {
                 if (CallActack(collision.gameObject))
@@ -117,49 +146,7 @@ public class GridMovement : MonoBehaviour
             returnToLastTarget = true;
         }
 
-        bool ForwardCheck()
-        {
-            Vector3 collisionPosition = collision.gameObject.transform.position;
-            switch (inputDirection)
-            {
-                case MovementDirection.right:
-                    if (collisionPosition.x >= transform.position.x
-                    && collisionPosition.y < transform.position.y + onCollisionDeviation
-                    && collisionPosition.y > transform.position.y - onCollisionDeviation)
-                    {
-                        return true;
-                    }
-                    break;
-
-                case MovementDirection.left:
-                    if (collisionPosition.x <= transform.position.x
-                    && collisionPosition.y < transform.position.y + onCollisionDeviation
-                    && collisionPosition.y > transform.position.y - onCollisionDeviation)
-                    {
-                        return true;
-                    }
-                    break;
-
-                case MovementDirection.up:
-                    if (collisionPosition.y >= transform.position.y
-                    && collisionPosition.x < transform.position.x + onCollisionDeviation
-                    && collisionPosition.x > transform.position.x - onCollisionDeviation)
-                    {
-                        return true;
-                    }
-                    break;
-
-                case MovementDirection.down:
-                    if (collisionPosition.y <= transform.position.y
-                    && collisionPosition.x < transform.position.x + onCollisionDeviation
-                    && collisionPosition.x > transform.position.x - onCollisionDeviation)
-                    {
-                        return true;
-                    }
-                    break;
-            }
-            return false;
-        }
+        
     }
     #endregion
     #region Actack
@@ -170,7 +157,14 @@ public class GridMovement : MonoBehaviour
         return false;
     }
     #endregion
-
+    public void Respawn()
+    {
+        lastTarget = spawn;
+        target = spawn;
+        transform.position = spawn;
+        returnToLastTarget = false;
+        inMotion = false;
+    }
     public bool HitCheck(RaycastHit2D hit)
     {
         if (hit.transform == null)
@@ -210,5 +204,22 @@ public class GridMovement : MonoBehaviour
         }
 
         return false;
+    }
+
+    public Vector2 RayDirection()
+    {
+        Debug.Log(inputDirection);
+        switch (inputDirection)
+        {
+            case MovementDirection.up:
+                return Vector2.up;
+            case MovementDirection.down:
+                return Vector2.down;
+            case MovementDirection.right:
+                return Vector2.right;
+            case MovementDirection.left:
+                return Vector2.left;
+        }
+        return Vector2.zero;
     }
 }

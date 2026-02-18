@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RockEmeny : GridMovement
 {
-    public Transform targetplace;
+    
     public bool targeting;
     [SerializeField] RoomIndex currentRoom;
 
@@ -21,8 +21,9 @@ public class RockEmeny : GridMovement
 
 
     // Update is called once per frame
-    void Start()
+    public override void Start()
     {
+        base.Start();
         AssignTarget(currentRoom);
         PickMove();
     }
@@ -55,7 +56,7 @@ public class RockEmeny : GridMovement
                 Actack();
                 break;
             case ActackType.strike:
-                Actack();
+                
                 break;
         }
         
@@ -66,6 +67,65 @@ public class RockEmeny : GridMovement
 
 
     }
+    #region strikeActack
+    void StrikeActack(Vector2 upDown, Transform upDownHit, Vector2 leftRight, Transform leftRightHit) //called if movement can't be performed in planed direction so actack instead
+    {
+        if (actacking == ActackType.none)
+        {
+            actacking = ActackType.strike;
+        }
+        Debug.Log("StrikeActack");
+        if (actacking == ActackType.none)
+        {
+            actacking = ActackType.strike;
+        }
+
+        int xPoints = CheckGreater(leftRightHit);
+        int yPoints = CheckGreater(upDownHit);
+
+        int CheckGreater(Transform hit)
+        {
+            if (hit == null)
+            {
+                return 0;
+            }
+            else if (hit.gameObject.tag == "Player")
+            {
+                return 2;
+            }
+            else if (hit.gameObject.tag == "Breakable")
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        if (xPoints == yPoints)
+        {
+            if (Random.Range(0, 1) > 0.5f)
+            {
+                InputToDirection(upDown);
+            }
+            else
+            {
+                InputToDirection(leftRight);
+            }
+        }
+        else if (xPoints > yPoints)
+        {
+            InputToDirection(leftRight);
+        }
+        else
+        {
+            InputToDirection(upDown);
+        }
+
+
+        Actack();
+    }
+
+    #endregion
 
     void Actack()
     {
@@ -73,10 +133,14 @@ public class RockEmeny : GridMovement
         {
             return;
         }
-
-        RaycastHit2D actackHit = Physics2D.Raycast(transform.position, RayDirection(), rayCastRange, nullAvoidance);
-
-        if (actackHit.transform.gameObject.tag == "Player")
+        Vector2 temp = RayDirection();
+        RaycastHit2D actackHit = Physics2D.Raycast(transform.position, temp, rayCastRange, nullAvoidance);
+        Debug.Log(gameObject.name + " has hit " + actackHit.transform + " actack mode = " + actacking + " direction of actack " + temp);
+        if (actackHit.transform == null)
+        {
+            Debug.Log(gameObject.name + " has hit nothign");
+        }
+        else if (actackHit.transform.gameObject.tag == "Player")
         {
             Player player = actackHit.transform.gameObject.GetComponent<Player>();
             if (player != null)
@@ -106,21 +170,7 @@ public class RockEmeny : GridMovement
             actackClock = actackFrequence;
         }
 
-        Vector2 RayDirection()
-        {
-            switch (inputDirection)
-            {
-                case MovementDirection.up:
-                    return Vector2.up;
-                case MovementDirection.down:
-                    return Vector2.down;
-                case MovementDirection.right:
-                    return Vector2.right;
-                case MovementDirection.left:
-                    return Vector2.left;
-            }
-            return Vector2.zero;
-        }
+        
     }
     public override bool CallActack(GameObject collisionObject)
     {
@@ -140,10 +190,13 @@ public class RockEmeny : GridMovement
             else
             {
                 actacking = ActackType.strike;
+                Actack();
             }
         }
         return false;
     }
+
+    #region Movement
 
     void PickMove()
     {
@@ -182,22 +235,7 @@ public class RockEmeny : GridMovement
                 }
                 else
                 {
-                    float varRandom = Random.Range(0, 1);
-
-                    if (actacking == ActackType.none)
-                    {
-                        actacking = ActackType.strike;
-                    }
-
-                    targeting = false;
-                    if (varRandom > 0.5f)
-                    {
-                        Actack();
-                    }
-                    else
-                    {
-                        Actack();
-                    }
+                    
                 }
             }
         }
@@ -225,23 +263,9 @@ public class RockEmeny : GridMovement
                 }
                 else
                 {
-                    float varRandom = Random.Range(0, 1);
+                    //StrikeActack(UpDownDirection, Yhit.transform, leftRightDirection, Xhit.transform);
 
-                    if (actacking == ActackType.none)
-                    {
-                        actacking = ActackType.strike;
-                    }
-
-                    targeting = false;
-                    if (varRandom > 0.5f)
-                    {
-                        Actack();
-
-                    }
-                    else
-                    {
-                        Actack();
-                    }
+                    //do nothing
                 }
             }
         }
@@ -281,16 +305,11 @@ public class RockEmeny : GridMovement
 
 
     }
+    #endregion
 
 
-        float NegavtiveCheck(float negCheck)
-        {
-            if (negCheck < 0)
-            {
-                negCheck = negCheck * -1;
-            }
-            return negCheck;
-        }
+
+    #region TargetAssignment&Update
 
     public override void TargetUpdate(RoomIndex[] roomIndexRef)
     {
@@ -321,5 +340,16 @@ public class RockEmeny : GridMovement
         {
             Debug.Log("No attracnct part of door");
         }
+    }
+
+    #endregion
+
+    float NegavtiveCheck(float negCheck)
+    {
+        if (negCheck < 0)
+        {
+            negCheck = negCheck * -1;
+        }
+        return negCheck;
     }
 }

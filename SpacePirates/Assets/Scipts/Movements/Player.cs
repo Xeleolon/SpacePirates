@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+//using UnityEngine.Physics2DModule;
 public enum handItem {grapple, gun}
 
 public class Player : GridMovement
@@ -62,16 +63,52 @@ public class Player : GridMovement
     [SerializeField] int health = 10;
     [SerializeField] float inputGive = 0.5f;
     [SerializeField] float raycastRange = 1;
+    [Header("Combat")]
+    [SerializeField] float damage = 1;
+    [SerializeField] float actackFrequence = 1;
+    [SerializeField] float actackDistance = 1f;
+    [SerializeField] float actackSpread = 1.5f;
+    [SerializeField] int numberOfHits = 3;
+    [SerializeField] ContactFilter2D actackFilter;
+    private float actackCloak;
     int curHealth;
-
-    
-
-    
-
-    private void Start()
+    private void OnDrawGizmos()
     {
+        Vector2 area = new Vector2(actackDistance, actackSpread);
+        Vector2 areaPoint = new Vector2(transform.position.x, transform.position.y);
+
+        switch (inputDirection)
+        {
+            case MovementDirection.up:
+                area = new Vector2(actackSpread, actackDistance);
+                areaPoint = new Vector2(transform.position.x, transform.position.y + actackDistance / 2 + 0.5f);
+                break;
+            case MovementDirection.down:
+                area = new Vector2(actackSpread, actackDistance);
+                areaPoint = new Vector2(transform.position.x, transform.position.y - actackDistance / 2 + 0.5f);
+                break;
+            case MovementDirection.right:
+                area = new Vector2(actackDistance, actackSpread);
+                areaPoint = new Vector2(transform.position.x + actackDistance / 2 + 0.5f, transform.position.y);
+                break;
+            case MovementDirection.left:
+                area = new Vector2(actackDistance, actackSpread);
+                areaPoint = new Vector2(transform.position.x - actackDistance / 2 + 0.5f, transform.position.y);
+                break;
+        }
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(new Vector3(areaPoint.x, areaPoint.y, transform.position.z), new Vector3(area.x, area.y, 1));
+
+
+    }
+
+
+    public override void Start()
+    {
+        base.Start();
         animator = GetComponent<Animator>();
         curHealth = health;
+        spawn = transform.position;
 
         //cam.ScreenToWorldPoint(look);
     }
@@ -161,17 +198,17 @@ public class Player : GridMovement
             }
         }
 
-        
+
 
 
 
 
         #endregion
 
-
-
-
-
+        if (actackCloak > 0)
+        {
+            actackCloak -= 1 * Time.deltaTime;
+        }
     }
 
     private void FixedUpdate()
@@ -196,8 +233,69 @@ public class Player : GridMovement
     #region WeaponFire
     private void FireInput(InputAction.CallbackContext context)
     {
+        Actack();
+    }
 
-        Debug.Log("fire");
+    void Actack()
+    {
+        if (actackCloak > 0)
+        {
+            return;
+        }
+
+
+        Vector2 area = new Vector2(actackDistance, actackSpread);
+        Vector2 areaPoint = new Vector2(transform.position.x, transform.position.y);
+
+        switch(inputDirection)
+        {
+            case MovementDirection.up:
+                area = new Vector2(actackSpread, actackDistance);
+                areaPoint = new Vector2(transform.position.x, transform.position.y + actackDistance / 2 + 0.5f);
+                break;
+            case MovementDirection.down:
+                area = new Vector2(actackSpread, actackDistance);
+                areaPoint = new Vector2(transform.position.x, transform.position.y - actackDistance / 2 + 0.5f);
+                break;
+            case MovementDirection.right:
+                area = new Vector2(actackDistance, actackSpread);
+                areaPoint = new Vector2(transform.position.x + actackDistance / 2 + 0.5f, transform.position.y);
+                break;
+            case MovementDirection.left:
+                area = new Vector2(actackDistance, actackSpread);
+                areaPoint = new Vector2(transform.position.x - actackDistance / 2 + 0.5f, transform.position.y);
+                break;
+        }
+
+
+        Collider2D[] HitEmenies = new Collider2D[numberOfHits];
+
+        int numberofHits = Physics2D.OverlapBox(areaPoint, area, 0, actackFilter, HitEmenies);
+
+
+        if (numberOfHits <= 0)
+        {
+            //Debug.Log("Player had no Hits");
+            actackCloak = actackFrequence;
+            return;
+        }
+        //Debug.Log("Player has hit ");
+        for (int i = 0; i < HitEmenies.Length; i++)
+        {
+            //Debug.Log(i + " Damaging ");
+            if (HitEmenies[i] != null)
+            {
+                //Debug.Log(i + " Damaging " + HitEmenies[i]);
+                EmenyBase emenyHealth = HitEmenies[i].GetComponent<EmenyBase>();
+                if (emenyHealth != null)
+                {
+                    emenyHealth.AlterHealth(-damage);
+                    //actackCloak = actackFrequence;
+                }
+            }
+        }
+
+        actackCloak = actackFrequence;
     }
     #endregion
 
@@ -207,11 +305,15 @@ public class Player : GridMovement
     public void AlterHealth(int alter)
     {
         curHealth += alter;
+        
         if (curHealth <= 0)
         {
             curHealth = 0;
+            actackCloak = 0;
             Debug.Log("Player Died");
+            Respawn();
             LevelUIControl.instance.ChangeHeath(curHealth - alter);
+            LevelUIControl.instance.PlayerDied(gameObject);
         }
         else if (curHealth >= health)
         {
@@ -229,6 +331,14 @@ public class Player : GridMovement
             {
                 LevelUIControl.instance.ChangeHeath(curHealth);
             }
+        }
+    }
+
+    public void RespawnHealth()
+    {
+        for (int i = 0; i <= health; i++)
+        {
+            AlterHealth(1);
         }
     }
 
