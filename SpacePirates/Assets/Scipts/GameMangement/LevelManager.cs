@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
 {
@@ -22,17 +23,65 @@ public class LevelManager : MonoBehaviour
     #endregion
     [Tooltip("LengthInMinutes")]
     [SerializeField] public float gameLength = 100;
+    private bool winConditionMet;
 
     [Header("RoomData")]
     [SerializeField] RoomIndex[] rooms;
     [SerializeField] Doorway[] allDoors;
     [SerializeField] int sensorDeperation = 1;
-    bool winConditionMet;
+    //spawnVarriables
+    [Header("SpawnSystem")]
+    public GameObject[] spawnObjects;
+    public int[] numberOfSpawns;
+    [SerializeField] LayerMask spawnFilter;
+    public bool TestSpawn;
+
+    private int[] spawnableRoom;
 
 
     private void Start()
     {
         SetupNagivationLists();
+
+
+        #region setSpawnableRooms
+        int[] tempSpawnableRooms = new int[rooms.Length];
+        int useableRooms = 0;
+
+        for (int roomSetLoop = 0; roomSetLoop < rooms.Length; roomSetLoop++) 
+        {
+            if (rooms[roomSetLoop].spawnLocationParent != null)
+            {
+                tempSpawnableRooms[useableRooms] = roomSetLoop;
+                useableRooms += 1;
+            }
+        }
+
+        spawnableRoom = new int[useableRooms];
+
+        if (useableRooms != 0)
+        {
+            for(int spawnSetLoop = 0; spawnSetLoop < spawnableRoom.Length; spawnSetLoop++)
+            {
+                spawnableRoom[spawnSetLoop] = tempSpawnableRooms[spawnSetLoop];
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No Spawnable Location");
+        }
+
+
+        #endregion
+    }
+
+    private void Update()
+    {
+        if (TestSpawn)
+        {
+            Spawn();
+            TestSpawn = false;
+        }
     }
     #region AiNavigation
     void SetupNagivationLists()
@@ -180,6 +229,88 @@ public class LevelManager : MonoBehaviour
     }
     #endregion
 
+
+    #region Spawn System
+    public void Spawn()
+    {
+        if (numberOfSpawns.Length == 0 || numberOfSpawns.Length != spawnObjects.Length) //temp for testing
+        {
+            Debug.LogWarning("Temp Element for testing this Check Stop spawning" );
+            return;
+        }
+        //collect rooms
+        int pickRoom = spawnableRoom[Random.Range(0, spawnableRoom.Length - 1)];
+
+        Transform[] spawnLocations = rooms[pickRoom].spawnLocations;
+
+        
+        //values set to useable spawn locations
+        Vector2 areaSize = new Vector2(1, 1);
+        List<int> useableLocations = new List<int>(); //use list as able to remove possible options for random generator
+
+        for (int spawnLoopCheck = 0; spawnLoopCheck < spawnLocations.Length; spawnLoopCheck++) //find all Avialable spawn locations
+        {
+            Vector2 tempLocation = new Vector2(spawnLocations[spawnLoopCheck].position.x, spawnLocations[spawnLoopCheck].position.y);
+
+            if (!Physics2D.OverlapBox(tempLocation, areaSize, 0, spawnFilter))
+            {
+                useableLocations.Add(spawnLoopCheck);
+                //Debug.Log("adding " + spawnLoopCheck );
+            }
+
+            //Debug.Log("Loop" + spawnLoopCheck + " has count" + useableLocations.Count);
+        }
+
+        if (useableLocations.Count <= 0)
+        {
+            Debug.Log("No spawnable Location in " + rooms[pickRoom].gameObject.name + " spawn location Length" + spawnLocations.Length);
+            return;
+        }
+
+        int spawnableSize = 0;
+
+        for (int setSpawnSizeLoop = 0; setSpawnSizeLoop < numberOfSpawns.Length; setSpawnSizeLoop++)
+        {
+            spawnableSize += numberOfSpawns[setSpawnSizeLoop];
+        }
+
+        if (spawnableSize >= useableLocations.Count)
+        {
+            spawnableSize = useableLocations.Count - 1;
+        }
+
+        for (int spawnLoop = 0; spawnLoop < spawnObjects.Length; spawnLoop++)
+        {
+            if (useableLocations.Count > 0 && numberOfSpawns[spawnLoop] != 0 && spawnObjects[spawnLoop] != null)
+            {
+                for (int spawnCopy = 0; spawnCopy < numberOfSpawns[spawnLoop]; spawnCopy++)
+                {
+                    if (useableLocations.Count > 0)
+                    {
+                        int placement = Random.Range(0, useableLocations.Count - 1);
+                        int location = useableLocations[placement];
+                        useableLocations.Remove(location);
+                        GameObject refence = Instantiate(spawnObjects[spawnLoop], spawnLocations[location].position, Quaternion.identity);
+                        GridMovement emenyScript = refence.GetComponent<GridMovement>();
+                        if (emenyScript != null)
+                        {
+                            emenyScript.SpawnObject(rooms[pickRoom]);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+    }
+
+    #endregion
+    #region GameOverVictory&Reload
     public void GameOver()
     {
         if (!winConditionMet)
@@ -206,6 +337,7 @@ public class LevelManager : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
     }
+    #endregion
 
 
 

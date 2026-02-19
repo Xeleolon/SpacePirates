@@ -56,10 +56,11 @@ public class LevelUIControl : MonoBehaviour
 
     private void OnValidate()
     {
-        if (shipRooms.Length <= 0)
+        if (shipRooms.Length > 0)
         {
             for (int i = 0; i < shipRooms.Length; i++)
             {
+                
                 shipRooms[i].SetNames();
             }
         }

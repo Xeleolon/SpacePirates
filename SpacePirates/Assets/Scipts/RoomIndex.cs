@@ -11,8 +11,8 @@ public class RoomIndex : MonoBehaviour
     [HideInInspector] public int TotalHealth;
     private bool loopOnced;
     [SerializeField] bool showSpawnLocations;
-    [SerializeField] Transform spawnLocationParent;
-    private Transform[] spawnLocations;
+    public Transform spawnLocationParent;
+    [HideInInspector] public Transform[] spawnLocations;
 
     private void OnDrawGizmos()
     {
@@ -28,6 +28,20 @@ public class RoomIndex : MonoBehaviour
         {
             spawnLocations[gizmosLoop] = spawnLocationParent.GetChild(gizmosLoop);
             Gizmos.DrawWireCube(new Vector3(spawnLocations[gizmosLoop].position.x, spawnLocations[gizmosLoop].position.y, transform.position.z), boxSize);
+        }
+    }
+
+    private void Start()
+    {
+        if (spawnLocationParent != null)
+        {
+            int childCount = spawnLocationParent.childCount;
+            spawnLocations = new Transform[childCount];
+
+            for (int spawnLoop = 0; spawnLoop < spawnLocations.Length; spawnLoop++)
+            {
+                spawnLocations[spawnLoop] = spawnLocationParent.GetChild(spawnLoop);
+            }
         }
     }
 

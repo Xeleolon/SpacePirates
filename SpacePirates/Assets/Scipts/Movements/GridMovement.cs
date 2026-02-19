@@ -178,6 +178,11 @@ public class GridMovement : MonoBehaviour
         return false;
     }
     #endregion
+
+    public virtual void SpawnObject(RoomIndex startRoom)
+    {
+
+    }
     public void Respawn()
     {
         lastTarget = spawn;

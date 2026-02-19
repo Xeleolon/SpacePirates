@@ -21,11 +21,17 @@ public class RockEmeny : GridMovement
 
 
     // Update is called once per frame
+    public virtual void SpawnObject(RoomIndex startRoom)
+    {
+        currentRoom = startRoom;
+        AssignTarget(currentRoom);
+        PickMove();
+    }
     public override void Start()
     {
         base.Start();
-        AssignTarget(currentRoom);
-        PickMove();
+        //AssignTarget(currentRoom);
+        //PickMove();
     }
     void Update()
     {
