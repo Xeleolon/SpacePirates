@@ -24,7 +24,7 @@ public class LevelUIControl : MonoBehaviour
     [SerializeField] bool test;
 
     [Header("ProgressBar/GameLength")]
-    [SerializeField] float gameLength = 100;
+    private float gameLength = 100;
     [Range(0, 20)]
     [SerializeField] float progressSpeed = 1;
     private float currentProgress;
@@ -49,6 +49,10 @@ public class LevelUIControl : MonoBehaviour
     [SerializeField] float respawnTime = 1;
     private float respawnClock;
     private GameObject player;
+    [Header("Victory&DefeatUI")]
+    [SerializeField] GameObject respawnScreen;
+    [SerializeField] GameObject gameOverScreen;
+    [SerializeField] GameObject victoryScreen;
 
     private void OnValidate()
     {
@@ -58,6 +62,51 @@ public class LevelUIControl : MonoBehaviour
             {
                 shipRooms[i].SetNames();
             }
+        }
+    }
+    private void Start()
+    {
+        gameLength = LevelManager.instance.gameLength * 60;
+
+        if (respawnScreen.activeSelf)
+        {
+            respawnScreen.SetActive(false);
+        }
+    }
+
+    public void LoadGameOverScreen()
+    {
+        if (!respawnScreen.activeSelf)
+        {
+            respawnScreen.SetActive(true);
+        }
+
+        if (!gameOverScreen.activeSelf)
+        {
+            gameOverScreen.SetActive(true);
+        }
+
+        if (victoryScreen.activeSelf)
+        {
+            victoryScreen.SetActive(false);
+        }
+    }
+
+    public void LoadVictoryScreen()
+    {
+        if (!respawnScreen.activeSelf)
+        {
+            respawnScreen.SetActive(true);
+        }
+
+        if (!victoryScreen.activeSelf)
+        {
+            victoryScreen.SetActive(true);
+        }
+
+        if (gameOverScreen.activeSelf)
+        {
+            gameOverScreen.SetActive(false);
         }
     }
 
@@ -71,6 +120,7 @@ public class LevelUIControl : MonoBehaviour
 
         if (currentProgress >= gameLength)
         {
+            LevelManager.instance.Victory();
             Debug.Log("Victory game one");
         }
         else
@@ -191,7 +241,12 @@ public class LevelUIControl : MonoBehaviour
                 if (damagePercent <= 0)
                 {
                     shipRooms[roomLoop].damageIcon.color = roomDead;
-                    damagedroom -= 1;
+                    if (shipRooms[roomLoop].damaged != true)
+                    {
+                        damagedroom -= 1;
+
+                        shipRooms[roomLoop].damaged = true;
+                    }
 
                     if (damagedroom <= 0)
                     {

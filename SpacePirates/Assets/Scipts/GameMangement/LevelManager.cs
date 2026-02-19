@@ -1,17 +1,40 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    #region Instance/Awake
+    public static LevelManager instance;
+
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+
+        //DontDestoryOnLoad(this.gameObject);
+    }
+    #endregion
+    [Tooltip("LengthInMinutes")]
+    [SerializeField] public float gameLength = 100;
+
+    [Header("RoomData")]
     [SerializeField] RoomIndex[] rooms;
     [SerializeField] Doorway[] allDoors;
     [SerializeField] int sensorDeperation = 1;
+    bool winConditionMet;
 
 
     private void Start()
     {
         SetupNagivationLists();
     }
-
+    #region AiNavigation
     void SetupNagivationLists()
     {
 
@@ -154,13 +177,39 @@ public class LevelManager : MonoBehaviour
 
             }
         }
+    }
+    #endregion
 
+    public void GameOver()
+    {
+        if (!winConditionMet)
+        {
+            LevelUIControl.instance.LoadGameOverScreen();
+            Debug.Log("GameOver You Lost");
+            winConditionMet = true;
+        }
+    }
 
+    public void Victory()
+    {
+        if (!winConditionMet)
+        {
+            LevelUIControl.instance.LoadVictoryScreen();
+            Debug.Log("GameOver You Won");
+            winConditionMet = true;
+        }
+        
+    }
+
+    public void ReloadLevel()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
     }
 
 
 
-    
+
 
 
 

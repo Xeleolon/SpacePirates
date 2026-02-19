@@ -211,13 +211,7 @@ public class Player : GridMovement
         }
     }
 
-    private void FixedUpdate()
-    {
-        #region movement FixedUpdates
-        
-        #endregion
-
-    }
+    
 
     #region keyboardSwitch
 

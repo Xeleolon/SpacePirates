@@ -10,6 +10,7 @@ public class RoomData
     private int systemsHealth;
     private int damageSystems;
     public Image damageIcon;
+    [HideInInspector] public bool damaged = false;
     #region systemname
 
     private bool nameSet;

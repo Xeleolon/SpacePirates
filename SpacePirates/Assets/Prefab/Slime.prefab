@@ -182,6 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  cancelSpeed: 1.5
   raycastTagIngore:
   - Wall
   rayCastRangeGrid: 1

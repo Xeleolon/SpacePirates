@@ -4,6 +4,9 @@ public enum ActackType {none, strike, contiuneTillDead, huntPlayer}
 public class GridMovement : MonoBehaviour
 {
     [SerializeField] float speed = 5;
+    [Tooltip("if the object takes more than speed * this it returns to last target")]
+    [SerializeField] float cancelSpeed = 1.5f;
+    private float cancelSpeedClock;
     [Header("CollisionChecks")]
     [SerializeField] string[] raycastTagIngore;
     [SerializeField] float rayCastRangeGrid = 1;
@@ -38,13 +41,22 @@ public class GridMovement : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             if (transform.position.x == lastTarget.x && transform.position.y == lastTarget.y)
             {
+
+                target = lastTarget;
+                //Debug.Log(gameObject.name + " Returning to last target");
                 inMotion = false;
                 returnToLastTarget = false;
+                cancelSpeedClock = 0;
                 //Debug.Log("going out of motion at 1");
                 return false;
             }
             else
             {
+                if (cancelSpeedClock > cancelSpeed)
+                {
+                    return false;
+                }
+
                 transform.position = Vector3.MoveTowards(transform.position, lastTarget, speed * Time.deltaTime);
                 return true;
             }
@@ -55,12 +67,20 @@ public class GridMovement : MonoBehaviour
             if (transform.position.x == target.x && transform.position.y == target.y)
             {
                 inMotion = false;
+                cancelSpeedClock = 0;
                 //Debug.Log("going out of motion at 1");
                 return false;
             }
             else
             {
+                if (cancelSpeedClock > cancelSpeed)
+                {
+                    return false;
+                }
+                
                 transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                cancelSpeedClock += 1 * Time.deltaTime;
+                
                 return true;
             }
         }
@@ -75,7 +95,7 @@ public class GridMovement : MonoBehaviour
         inputDirection = InputToDirection(input);
         lastTarget = CheckTargets(target);
         target = CheckTargets(new Vector3(transform.position.x + input.x, transform.position.y + input.y, transform.position.z));
-
+        //Debug.Log(gameObject.name + " Loading target " + target + " loading old Target " + lastTarget);
 
         //recallicutae returnToLastTarget and Target to be on grid only
         Vector3 CheckTargets(Vector3 oldTarget)
@@ -139,10 +159,11 @@ public class GridMovement : MonoBehaviour
             {
                 if (CallActack(collision.gameObject))
                 {
+                    //Debug.Log(gameObject.name + " tripped call Actack for collision");
                     target = lastTarget;
                 }
             }
-
+            cancelSpeedClock = 0;
             returnToLastTarget = true;
         }
 
@@ -208,7 +229,7 @@ public class GridMovement : MonoBehaviour
 
     public Vector2 RayDirection()
     {
-        Debug.Log(inputDirection);
+        //Debug.Log(inputDirection);
         switch (inputDirection)
         {
             case MovementDirection.up:

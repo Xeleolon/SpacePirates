@@ -10,6 +10,26 @@ public class RoomIndex : MonoBehaviour
     private int numberOfCAlls;
     [HideInInspector] public int TotalHealth;
     private bool loopOnced;
+    [SerializeField] bool showSpawnLocations;
+    [SerializeField] Transform spawnLocationParent;
+    private Transform[] spawnLocations;
+
+    private void OnDrawGizmos()
+    {
+        if (spawnLocationParent == null || !showSpawnLocations)
+        {
+            return;
+        }
+        int childCount = spawnLocationParent.childCount;
+        spawnLocations = new Transform[childCount];
+        Gizmos.color = Color.red;
+        Vector3 boxSize = new Vector3(0.9f, 0.9f, 0.9f);
+        for (int gizmosLoop = 0; gizmosLoop < spawnLocations.Length; gizmosLoop++)
+        {
+            spawnLocations[gizmosLoop] = spawnLocationParent.GetChild(gizmosLoop);
+            Gizmos.DrawWireCube(new Vector3(spawnLocations[gizmosLoop].position.x, spawnLocations[gizmosLoop].position.y, transform.position.z), boxSize);
+        }
+    }
 
 
     #region generate Breakable Lists
