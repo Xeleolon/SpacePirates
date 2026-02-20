@@ -31,16 +31,24 @@ public class LevelManager : MonoBehaviour
     [SerializeField] int sensorDeperation = 1;
     //spawnVarriables
     [Header("SpawnSystem")]
-    public GameObject[] spawnObjects;
-    public int[] numberOfSpawns;
+    [SerializeField] SpawnPattern[] spawnPatterns;
     [SerializeField] LayerMask spawnFilter;
     public bool TestSpawn;
+
+    [Tooltip("LengthInMinutes")]
+    [SerializeField] float startRate = 1;
+    [SerializeField] float spawnRate = 1;
+    private float spawnClock;
+
+    public delegate void onBreakableChange();
+    public onBreakableChange updateTargets;
 
     private int[] spawnableRoom;
 
 
     private void Start()
     {
+        spawnClock = startRate * 60;
         SetupNagivationLists();
 
 
@@ -70,9 +78,9 @@ public class LevelManager : MonoBehaviour
         {
             Debug.LogWarning("No Spawnable Location");
         }
-
-
         #endregion
+
+        
     }
 
     private void Update()
@@ -82,6 +90,19 @@ public class LevelManager : MonoBehaviour
             Spawn();
             TestSpawn = false;
         }
+
+        #region SpawnClock
+        if (spawnClock > spawnRate * 60)
+        {
+            Spawn();
+            spawnClock = 0;
+        }
+        else
+        {
+            spawnClock += 1 * Time.deltaTime;
+        }
+
+        #endregion
     }
     #region AiNavigation
     void SetupNagivationLists()
@@ -228,14 +249,32 @@ public class LevelManager : MonoBehaviour
         }
     }
     #endregion
+    #region UpdateNavigation
+    public void UpdateNavigation()
+    {
+        SetupNagivationLists();
+        updateTargets.Invoke();
 
+    }
+    #endregion
 
     #region Spawn System
     public void Spawn()
     {
+
+        SpawnPattern pickSpawnPartern = PickSpawn();
+        if (pickSpawnPartern == null)
+        {
+            Debug.LogWarning("no spawn pattern available");
+            return;
+        }
+        GameObject[] spawnObjects = pickSpawnPartern.spawnObjects;
+        int[] numberOfSpawns = pickSpawnPartern.numberOfSpawns;
+
+
         if (numberOfSpawns.Length == 0 || numberOfSpawns.Length != spawnObjects.Length) //temp for testing
         {
-            Debug.LogWarning("Temp Element for testing this Check Stop spawning" );
+            Debug.LogWarning(pickSpawnPartern.name + "object and spawns don't have the same amount of catergargies" );
             return;
         }
         //collect rooms
@@ -299,6 +338,16 @@ public class LevelManager : MonoBehaviour
                     }
                 }
             }
+        }
+
+        SpawnPattern PickSpawn()
+        {
+            if (spawnPatterns.Length == 0)
+            {
+                return null;
+            }
+
+            return spawnPatterns[Random.Range(0, spawnPatterns.Length - 1)];
         }
 
 

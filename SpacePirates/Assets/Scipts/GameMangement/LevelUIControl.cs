@@ -32,6 +32,8 @@ public class LevelUIControl : MonoBehaviour
     [SerializeField] Gradient progressGradient;
     [SerializeField] Image progressFill;
 
+    bool engineDamage;
+
     [Header("Room Damage")]
     [SerializeField] RoomData[] shipRooms;
     [SerializeField] Color roomUnDamaged;
@@ -49,10 +51,14 @@ public class LevelUIControl : MonoBehaviour
     [SerializeField] float respawnTime = 1;
     private float respawnClock;
     private GameObject player;
+    bool playerDied;
     [Header("Victory&DefeatUI")]
     [SerializeField] GameObject respawnScreen;
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject victoryScreen;
+
+    [Header("Broken Event")]
+    [SerializeField] GameObject engineDamageIcon;
 
     private void OnValidate()
     {
@@ -117,7 +123,10 @@ public class LevelUIControl : MonoBehaviour
     private void Update()
     {
         #region Progress
-        currentProgress += progressSpeed * Time.deltaTime;
+        if (!engineDamage)
+        {
+            currentProgress += progressSpeed * Time.deltaTime;
+        }
 
         if (currentProgress >= gameLength)
         {
@@ -140,19 +149,21 @@ public class LevelUIControl : MonoBehaviour
 
 
         #endregion
-
-        if (respawnClock >= respawnTime)
+        if (playerDied)
         {
-            if (player != null)
+            if (respawnClock >= respawnTime)
             {
-                Respawn();
+                if (player != null)
+                {
+                    Respawn();
+                }
             }
-        }
-        else
-        {
-            respawnClock += 1 * Time.deltaTime;
-            float tempClock = Mathf.Round((respawnTime - respawnClock) * 10) / 10;
-            respawnNumbers.SetText(tempClock.ToString());
+            else
+            {
+                respawnClock += 1 * Time.deltaTime;
+                float tempClock = Mathf.Round((respawnTime - respawnClock) * 10) / 10;
+                respawnNumbers.SetText(tempClock.ToString());
+            }
         }
     }
     #region PlayerHealthAlternation
@@ -175,6 +186,7 @@ public class LevelUIControl : MonoBehaviour
     }
     public void PlayerDied(GameObject newPLayer)
     {
+        playerDied = true;
         if (player == null)
         {
             player = newPLayer;
@@ -196,6 +208,7 @@ public class LevelUIControl : MonoBehaviour
 
     private void Respawn()
     {
+        playerDied = false;
         player.GetComponent<Player>().RespawnHealth();
         if (!statusAlive.activeSelf)
         {
@@ -207,7 +220,7 @@ public class LevelUIControl : MonoBehaviour
         }
     }
     #endregion
-
+    #region RoomHealth
     public void SetRoomHealth(RoomIndex room, int totalHealth)
     {
         for (int roomLoop = 0; roomLoop < shipRooms.Length; roomLoop++)
@@ -264,6 +277,24 @@ public class LevelUIControl : MonoBehaviour
                 }
                 return;
             }
+        }
+    }
+    #endregion
+    public void EngineDamage(bool damagedStatus)
+    {
+        engineDamage = damagedStatus;
+
+        if (engineDamageIcon != null)
+        {
+            if (engineDamage && !engineDamageIcon.activeSelf)
+            {
+                engineDamageIcon.SetActive(true);
+            }
+            else if (!engineDamage && engineDamageIcon.activeSelf)
+            {
+                engineDamageIcon.SetActive(false);
+            }
+
         }
     }
 

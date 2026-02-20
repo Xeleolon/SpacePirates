@@ -5,6 +5,7 @@ public class RockEmeny : GridMovement
     
     public bool targeting;
     [SerializeField] RoomIndex currentRoom;
+    [SerializeField] Attractant attractedTo = Attractant.energy;
 
     [SerializeField] float rayCastRange = 1;
 
@@ -21,7 +22,7 @@ public class RockEmeny : GridMovement
 
 
     // Update is called once per frame
-    public virtual void SpawnObject(RoomIndex startRoom)
+    public override void SpawnObject(RoomIndex startRoom)
     {
         currentRoom = startRoom;
         AssignTarget(currentRoom);
@@ -30,8 +31,14 @@ public class RockEmeny : GridMovement
     public override void Start()
     {
         base.Start();
+        LevelManager.instance.updateTargets += UpdateTarget;
         //AssignTarget(currentRoom);
         //PickMove();
+    }
+    private void OnDestroy()
+    {
+        LevelManager.instance.updateTargets -= UpdateTarget;
+        Debug.Log("removing Subcrition");
     }
     void Update()
     {
@@ -132,7 +139,7 @@ public class RockEmeny : GridMovement
     }
 
     #endregion
-
+    #region Actack
     void Actack()
     {
         if (actackClock > 0)
@@ -201,7 +208,7 @@ public class RockEmeny : GridMovement
         }
         return false;
     }
-
+    #endregion
     #region Movement
 
     void PickMove()
@@ -332,14 +339,21 @@ public class RockEmeny : GridMovement
             }
         }
     }
-
+    private void UpdateTarget()
+    {
+        AssignTarget(currentRoom);
+    }
     public void AssignTarget(RoomIndex newRoom)
     {
         currentRoom = newRoom;
-        Breakable targetBreakable = currentRoom.CheckBreakableLists(Attractant.energy, transform.position, false);
+        Breakable targetBreakable = currentRoom.CheckBreakableLists(attractedTo, transform.position, false);
         
         if (targetBreakable != null)
         {
+            if (actacking == ActackType.contiuneTillDead)
+            {
+                actacking = ActackType.none;
+            }
             targetplace = targetBreakable.transform;
         }
         else

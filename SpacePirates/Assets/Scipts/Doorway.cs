@@ -24,20 +24,29 @@ public class Doorway : Breakable
         for (int i = 0; i < roomsReffences.Length; i++)
         {
             //Enegery
-            Breakable tempTarget = roomsReffences[i].CheckBreakableLists(Attractant.energy, transform.position, true);
-            if (tempTarget != null)
+            if (attractants.Count > 0)
             {
-                if (energyActractive < tempTarget.energyActractive)
+                for (int attranctsLoop = 0; attranctsLoop < attractants.Count; attranctsLoop++)
                 {
-                    energyActractive = tempTarget.energyActractive;
-                    energyTarget = tempTarget;
+                    Breakable tempTarget = roomsReffences[i].CheckBreakableLists(attractants[attranctsLoop].attractant, transform.position, true);
+                    if (tempTarget != null)
+                    {
+                        Attranctiveness tempAttractiveness = tempTarget.returnAttractantValues(attractants[attranctsLoop].attractant);
+                        if (tempAttractiveness != null)
+                        {
+                            if (attractants[attranctsLoop].value < tempAttractiveness.value)
+                            {
+                                attractants[attranctsLoop].value = tempAttractiveness.value;
+                                energyTarget = tempTarget;
+                            }
+                            else if (attractants[attranctsLoop].value == tempAttractiveness.value && 0.5 > Random.Range(0, 1)) //case of equal objects
+                            {
+                                attractants[attranctsLoop].value = tempAttractiveness.value;
+                                energyTarget = tempTarget;
+                            }
+                        }
+                    }
                 }
-                else if (energyActractive == tempTarget.energyActractive && 0.5 > Random.Range(0, 1)) //case of equal objects
-                {
-                    energyActractive = tempTarget.energyActractive;
-                    energyTarget = tempTarget;
-                }
-                //Debug.Log(gameObject.name + " has a break able of " + tempTarget + " with a score of " + energyActractive);
             }
         }
 
@@ -46,18 +55,11 @@ public class Doorway : Breakable
 
     public void AsisgnTarget(Attractant type, Breakable target, int targetActractiveness)
     {
-        switch (type)
+        Attranctiveness doorAttranct = returnAttractantValues(type);
+        if (doorAttranct != null)
         {
-            case Attractant.energy:
-                energyTarget = target;
-                energyActractive = targetActractiveness - StandardSubtraction;
-                break;
-
-            default:
-                Debug.LogWarning(type + " has no assigned target data setup in DoorWay script");
-                break;
-
-
+            doorAttranct.target = target;
+            doorAttranct.value = targetActractiveness - StandardSubtraction;
         }
     }
 

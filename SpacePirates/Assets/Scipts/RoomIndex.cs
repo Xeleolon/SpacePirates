@@ -1,12 +1,27 @@
 using UnityEngine;
-public enum Attractant {player, energy, noAttractant};
-
+using System.Collections.Generic;
+public enum Attractant {player, energy, noAttractant, sleapPods, computer};
+[System.Serializable]
+public class BreakableLists
+{
+    [HideInInspector]
+    public string fontName;
+    public Attractant attractant;
+    [HideInInspector]
+    public Breakable[] array;
+    public void SetNames()
+    {
+        fontName = attractant.ToString();
+    }
+}
 public class RoomIndex : MonoBehaviour
 {
     [SerializeField] Breakable[] avalableBreakable;
     [SerializeField] Breakable[] doors;
+    #region typeLists
+    public List<BreakableLists> breakableLists = new List<BreakableLists>();
+    #endregion
 
-    private Breakable[] energy;
     private int numberOfCAlls;
     [HideInInspector] public int TotalHealth;
     private bool loopOnced;
@@ -14,6 +29,7 @@ public class RoomIndex : MonoBehaviour
     public Transform spawnLocationParent;
     [HideInInspector] public Transform[] spawnLocations;
 
+    #region onDrawGizmos & Validate
     private void OnDrawGizmos()
     {
         if (spawnLocationParent == null || !showSpawnLocations)
@@ -30,6 +46,18 @@ public class RoomIndex : MonoBehaviour
             Gizmos.DrawWireCube(new Vector3(spawnLocations[gizmosLoop].position.x, spawnLocations[gizmosLoop].position.y, transform.position.z), boxSize);
         }
     }
+    private void OnValidate()
+    {
+        if (breakableLists.Count > 0)
+        {
+            for (int i = 0; i < breakableLists.Count; i++)
+            {
+
+                breakableLists[i].SetNames();
+            }
+        }
+    }
+    #endregion
 
     private void Start()
     {
@@ -51,7 +79,18 @@ public class RoomIndex : MonoBehaviour
     {
         TotalHealth = 0;
         Breakable[] allBreakables = CompleteAllBreakable();
-        energy = BreakableObject(Attractant.energy);
+
+        if (breakableLists.Count > 0)
+        {
+            for (int i = 0; i < breakableLists.Count; i++)
+            {
+                breakableLists[i].array = BreakableObject(breakableLists[i].attractant);
+            }
+        }
+        else
+        {
+            Debug.LogError("No Breakable List set in Area Index " + gameObject.name);
+        }
 
         if (!loopOnced)
         {
@@ -114,21 +153,20 @@ public class RoomIndex : MonoBehaviour
     public Breakable CheckBreakableLists(Attractant type, Vector3 location, bool nullifyDoors) //return close object ot provide object of attranct type
     {
         numberOfCAlls += 1;
-        switch (type)
+        if (!breakableLists.Exists(i => i.attractant == type))
         {
-            case Attractant.energy:
-                if (energy == null || energy.Length == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    return energy[CheckingLists(energy)];
-                }
+            Debug.Log("Area Index "+ gameObject.name + " has no list for attranct type of " + type);
+            return null;
+        }
 
-            case Attractant.player:
-
-                return null ;
+        BreakableLists temp = breakableLists.Find(i => i.attractant == type);
+        if (temp.array == null || temp.array.Length == 0)
+        {
+            return null;
+        }
+        else
+        {
+            return temp.array[CheckingLists(temp.array)];
         }
 
         int CheckingLists(Breakable[] checkthis)
@@ -142,17 +180,8 @@ public class RoomIndex : MonoBehaviour
                 distanceModifier = 1 - (distanceModifier / 100);
                 int checkValue = 0;
 
-                switch(type)
-                {
-                    case Attractant.energy:
 
-                        checkValue = checkthis[i].energyActractive;
-                        break;
-                    default:
-                        Debug.LogWarning(type + " is checking through default set up code line for correct value");
-                        break;
-
-                }
+                checkValue = checkthis[i].GiveValue(type);
 
                 if (nullifyDoors && checkthis[i].GetComponent<Doorway>() != null)
                 {
@@ -172,6 +201,6 @@ public class RoomIndex : MonoBehaviour
             return placementTarget;
         }
 
-        return null;
+        //return null;
     }
 }

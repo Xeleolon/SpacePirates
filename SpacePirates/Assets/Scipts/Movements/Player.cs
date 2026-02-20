@@ -64,7 +64,7 @@ public class Player : GridMovement
     [SerializeField] float inputGive = 0.5f;
     [SerializeField] float raycastRange = 1;
     [Header("Combat")]
-    [SerializeField] float damage = 1;
+    [SerializeField] int damage = 1;
     [SerializeField] float actackFrequence = 1;
     [SerializeField] float actackDistance = 1f;
     [SerializeField] float actackSpread = 1.5f;
@@ -281,10 +281,15 @@ public class Player : GridMovement
             {
                 //Debug.Log(i + " Damaging " + HitEmenies[i]);
                 EmenyBase emenyHealth = HitEmenies[i].GetComponent<EmenyBase>();
+                Breakable breakable = HitEmenies[i].GetComponent<Breakable>();
                 if (emenyHealth != null)
                 {
                     emenyHealth.AlterHealth(-damage);
                     //actackCloak = actackFrequence;
+                }
+                else if (breakable != null)
+                {
+                    breakable.AlterHealth(damage);
                 }
             }
         }
