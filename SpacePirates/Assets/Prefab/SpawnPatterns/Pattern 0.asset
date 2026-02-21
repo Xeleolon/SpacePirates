@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3043c1af9692fc247ad76698b721e35b, type: 3}
-  m_Name: Pattern 2
+  m_Name: Pattern 0
   m_EditorClassIdentifier: 
   spawnObjects:
-  - {fileID: 3555079111088762799, guid: 1bd012edfecc9ec43880a8dcc3bfed6d, type: 3}
-  numberOfSpawns: 03000000
+  - {fileID: 7410863657490050409, guid: 73571a93405a63048999989141e164a3, type: 3}
+  - {fileID: 3555079111088762799, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+  - {fileID: 6343970163218587588, guid: afe390e84ba12ac44bb54364874bf291, type: 3}
+  numberOfSpawns: 010000000100000001000000

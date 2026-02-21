@@ -347,6 +347,11 @@ public class RockEmeny : GridMovement
     public void AssignTarget(RoomIndex newRoom)
     {
         currentRoom = newRoom;
+        if (newRoom == null)
+        {
+            Debug.LogWarning("No Room Available for " + gameObject.name);
+            return;
+        }
         Breakable targetBreakable = currentRoom.CheckBreakableLists(attractedTo, transform.position, false);
         
         if (targetBreakable != null)

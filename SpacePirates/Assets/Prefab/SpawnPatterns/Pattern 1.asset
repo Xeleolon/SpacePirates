@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Pattern 1
   m_EditorClassIdentifier: 
   spawnObjects:
-  - {fileID: 6323588198881178291, guid: 798baea92b05d244eb4fdcfa708c8eb6, type: 3}
-  numberOfSpawns: 03000000
+  - {fileID: 7236848255147405396, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
+  - {fileID: 6810643525367861938, guid: 20405d5edf3960640a0a368d2067c155, type: 3}
+  - {fileID: 7410863657490050409, guid: 73571a93405a63048999989141e164a3, type: 3}
+  - {fileID: 339432669275332026, guid: d9304ee848def5c418dfa54a722a3e3a, type: 3}
+  numberOfSpawns: 01000000010000000100000001000000

@@ -103,7 +103,7 @@ MonoBehaviour:
   targetplace: {fileID: 0}
   targeting: 0
   currentRoom: {fileID: 0}
-  attractedTo: 1
+  attractedTo: 4
   rayCastRange: 1
   damage: 1
   actackRayRange: 1.2

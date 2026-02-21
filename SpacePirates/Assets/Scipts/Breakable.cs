@@ -53,8 +53,10 @@ public class Breakable : MonoBehaviour
                 attractants[i].SetAttranct();
             }
         }
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        fuctionalSprite = spriteRenderer.sprite; 
+        if (spriteRenderer != null)
+        {
+            fuctionalSprite = spriteRenderer.sprite;
+        }
         currentHeath = health;
     }
     public void SetRoom(RoomIndex newRoom)
@@ -109,7 +111,7 @@ public class Breakable : MonoBehaviour
             LevelManager.instance.UpdateNavigation();
             broken = true;
 
-            if (damagedSprite != null)
+            if (damagedSprite != null && spriteRenderer != null)
             {
                 spriteRenderer.sprite = damagedSprite;
             }

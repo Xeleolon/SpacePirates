@@ -79,7 +79,6 @@ public class RoomIndex : MonoBehaviour
     {
         TotalHealth = 0;
         Breakable[] allBreakables = CompleteAllBreakable();
-
         if (breakableLists.Count > 0)
         {
             for (int i = 0; i < breakableLists.Count; i++)
@@ -132,11 +131,16 @@ public class RoomIndex : MonoBehaviour
             for (int i = 0; i < avalableBreakable.Length; i++)
             {
                 tempStorage[i] = avalableBreakable[i];
-             
+                if (tempStorage[i] == null)
+                {
+                    Debug.Log(gameObject.name + " "+  tempStorage[i] + " " + i + " is null");
+                    return null;
+                }
                 TotalHealth += tempStorage[i].health;
 
                 if (!loopOnced)
                 {
+                    
                     tempStorage[i].SetRoom(this);
                 }
             }
