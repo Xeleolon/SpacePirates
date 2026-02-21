@@ -58,8 +58,8 @@ public class Player : GridMovement
 
 
 
-    Animator animator;
-
+    
+    [Header("Player")]
     [SerializeField] int health = 10;
     [SerializeField] float inputGive = 0.5f;
     [SerializeField] float raycastRange = 1;
@@ -96,6 +96,7 @@ public class Player : GridMovement
                 areaPoint = new Vector2(transform.position.x - actackDistance / 2 + 0.5f, transform.position.y);
                 break;
         }
+        PlayStrikeAnimations();
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(new Vector3(areaPoint.x, areaPoint.y, transform.position.z), new Vector3(area.x, area.y, 1));
 
@@ -106,7 +107,10 @@ public class Player : GridMovement
     public override void Start()
     {
         base.Start();
-        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
         curHealth = health;
         spawn = transform.position;
 
@@ -261,7 +265,7 @@ public class Player : GridMovement
                 break;
         }
 
-
+        
         Collider2D[] HitEmenies = new Collider2D[numberOfHits];
 
         int numberofHits = Physics2D.OverlapBox(areaPoint, area, 0, actackFilter, HitEmenies);
@@ -271,6 +275,7 @@ public class Player : GridMovement
         {
             //Debug.Log("Player had no Hits");
             actackCloak = actackFrequence;
+            PlayStrikeAnimations();
             return;
         }
         //Debug.Log("Player has hit ");
@@ -293,7 +298,7 @@ public class Player : GridMovement
                 }
             }
         }
-
+        PlayStrikeAnimations();
         actackCloak = actackFrequence;
     }
     #endregion

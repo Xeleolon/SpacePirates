@@ -14,6 +14,12 @@ public class GridMovement : MonoBehaviour
     public LayerMask nullAvoidance;
     [SerializeField] float onCollisionDeviation = 0.2f;
     [SerializeField] string[] collisionTagAttack;
+    [Header("Animation")]
+    [HideInInspector] public Animator animator;
+    [SerializeField] Animator strikeAnimator;
+    [SerializeField] string[] strikeAnimations;
+    [SerializeField] bool useMovementAnimations;
+    [SerializeField] string[] movementAnimations;
 
 
     //privatemovevariables
@@ -25,12 +31,16 @@ public class GridMovement : MonoBehaviour
     Vector3 lastTarget;
     [HideInInspector] public Vector3 spawn;
     [HideInInspector] public MovementDirection inputDirection;
+    
 
     public Transform targetplace;
     Rigidbody2D rb;
     public virtual void Start()
     {
+        //strikeAnimator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        PlayMovementAnimations();
     }
     #region Movement
     public bool UpdateMove()
@@ -96,7 +106,7 @@ public class GridMovement : MonoBehaviour
         lastTarget = CheckTargets(target);
         target = CheckTargets(new Vector3(transform.position.x + input.x, transform.position.y + input.y, transform.position.z));
         //Debug.Log(gameObject.name + " Loading target " + target + " loading old Target " + lastTarget);
-
+        PlayMovementAnimations();
         //recallicutae returnToLastTarget and Target to be on grid only
         Vector3 CheckTargets(Vector3 oldTarget)
         {
@@ -179,6 +189,73 @@ public class GridMovement : MonoBehaviour
     }
     #endregion
 
+    #region Animations
+    public void PlayStrikeAnimations()
+    {
+        Debug.Log("Checking can Play Strike animations");
+        if (strikeAnimator == null)
+        {
+            return;
+        }
+        if (strikeAnimations.Length < 4)
+        {
+            return;
+        }
+        Debug.Log("Play Strike Animation");
+        switch (inputDirection)
+        {
+            case MovementDirection.up:
+                strikeAnimator.Play(strikeAnimations[0]);
+                break;
+            case MovementDirection.down:
+                strikeAnimator.Play(strikeAnimations[1]);
+                break;
+            case MovementDirection.right:
+                strikeAnimator.Play(strikeAnimations[2]);
+                break;
+            case MovementDirection.left:
+                strikeAnimator.Play(strikeAnimations[3]);
+                break;
+        }
+    }
+
+    void PlayMovementAnimations()
+    {
+        //Debug.Log("Checking can Play Movement animations");
+        if (animator == null)
+        {
+            return;
+        }
+
+        if (!useMovementAnimations)
+        {
+            return;
+        }
+
+        if (movementAnimations.Length < 4)
+        {
+            return;
+        }
+        //Debug.Log("Play Movement Animation");
+
+        switch (inputDirection)
+        {
+            case MovementDirection.up:
+                animator.Play(movementAnimations[0]);
+                break;
+            case MovementDirection.down:
+                animator.Play(movementAnimations[1]);
+                break;
+            case MovementDirection.right:
+                animator.Play(movementAnimations[2]);
+                break;
+            case MovementDirection.left:
+                animator.Play(movementAnimations[3]);
+                break;
+        }
+    }
+
+    #endregion;
     public virtual void SpawnObject(RoomIndex startRoom)
     {
 

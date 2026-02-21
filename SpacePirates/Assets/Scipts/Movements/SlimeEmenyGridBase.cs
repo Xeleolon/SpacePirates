@@ -136,7 +136,7 @@ public class SlimeEmenyGridBase : GridMovement
         {
             return;
         }
-
+        PlayStrikeAnimations();
         if (actackObject.tag == "Player")
         {
             //damage Player;

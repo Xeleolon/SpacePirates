@@ -146,6 +146,7 @@ public class RockEmeny : GridMovement
         {
             return;
         }
+        PlayStrikeAnimations();
         Vector2 temp = RayDirection();
         RaycastHit2D actackHit = Physics2D.Raycast(transform.position, temp, rayCastRange, nullAvoidance);
         Debug.Log(gameObject.name + " has hit " + actackHit.transform + " actack mode = " + actacking + " direction of actack " + temp);
