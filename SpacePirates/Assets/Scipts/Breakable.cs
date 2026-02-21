@@ -18,6 +18,9 @@ public class Breakable : MonoBehaviour
 
     public int health = 1;
     int currentHeath;
+    [SerializeField] Sprite damagedSprite;
+    private SpriteRenderer spriteRenderer;
+    private Sprite fuctionalSprite;
    
     public List<Attranctiveness> attractants = new List<Attranctiveness>();
 
@@ -50,7 +53,8 @@ public class Breakable : MonoBehaviour
                 attractants[i].SetAttranct();
             }
         }
-
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        fuctionalSprite = spriteRenderer.sprite; 
         currentHeath = health;
     }
     public void SetRoom(RoomIndex newRoom)
@@ -104,6 +108,11 @@ public class Breakable : MonoBehaviour
             }
             LevelManager.instance.UpdateNavigation();
             broken = true;
+
+            if (damagedSprite != null)
+            {
+                spriteRenderer.sprite = damagedSprite;
+            }
         }
     }
     public void Repaired()
@@ -116,6 +125,11 @@ public class Breakable : MonoBehaviour
                 attractants[attranctLoop].SetAttranct();
             }
             LevelManager.instance.UpdateNavigation();
+
+            if (fuctionalSprite != null)
+            {
+                spriteRenderer.sprite = fuctionalSprite;
+            }
             broken = false;
         }
     }

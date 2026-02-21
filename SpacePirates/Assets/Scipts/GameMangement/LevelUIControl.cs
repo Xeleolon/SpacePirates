@@ -59,6 +59,7 @@ public class LevelUIControl : MonoBehaviour
 
     [Header("Broken Event")]
     [SerializeField] GameObject engineDamageIcon;
+    [SerializeField] GameObject thrusterPluse;
 
     private void OnValidate()
     {
@@ -293,6 +294,18 @@ public class LevelUIControl : MonoBehaviour
             else if (!engineDamage && engineDamageIcon.activeSelf)
             {
                 engineDamageIcon.SetActive(false);
+            }
+
+        }
+        if (thrusterPluse != null)
+        {
+            if (engineDamage && !thrusterPluse.activeSelf)
+            {
+                thrusterPluse.SetActive(true);
+            }
+            else if (!engineDamage && thrusterPluse.activeSelf)
+            {
+                thrusterPluse.SetActive(false);
             }
 
         }
