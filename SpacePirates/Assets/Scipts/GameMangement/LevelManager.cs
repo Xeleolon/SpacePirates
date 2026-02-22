@@ -34,6 +34,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] SpawnPattern[] spawnPatterns;
     [SerializeField] LayerMask spawnFilter;
     public bool TestSpawn;
+    [SerializeField] Transform spawnPlatform;
 
     [Tooltip("LengthInMinutes")]
     [SerializeField] float startRate = 1;
@@ -71,7 +72,9 @@ public class LevelManager : MonoBehaviour
         {
             for(int spawnSetLoop = 0; spawnSetLoop < spawnableRoom.Length; spawnSetLoop++)
             {
+                //Debug.Log("loop" + spawnSetLoop + " is giving " + tempSpawnableRooms);
                 spawnableRoom[spawnSetLoop] = tempSpawnableRooms[spawnSetLoop];
+                //Debug.Log("loop" + spawnSetLoop + " is giving " + tempSpawnableRooms);
             }
         }
         else
@@ -253,7 +256,15 @@ public class LevelManager : MonoBehaviour
     public void UpdateNavigation()
     {
         SetupNagivationLists();
-        updateTargets.Invoke();
+        //updateTargets.Invoke();
+
+        Component[] targetMovementScript;
+        targetMovementScript = spawnPlatform.gameObject.GetComponents(typeof(RockEmeny));
+
+        foreach (RockEmeny targetingEmeny in targetMovementScript)
+        {
+            targetingEmeny.UpdateTarget();
+        }
 
     }
     #endregion
@@ -262,7 +273,7 @@ public class LevelManager : MonoBehaviour
     public void Spawn()
     {
 
-        SpawnPattern pickSpawnPartern = PickSpawn();
+        SpawnPattern pickSpawnPartern = PickSpawnPattern();
         if (pickSpawnPartern == null)
         {
             Debug.LogWarning("no spawn pattern available");
@@ -278,6 +289,7 @@ public class LevelManager : MonoBehaviour
             return;
         }
         //collect rooms
+        //Debug.Log("pick room = " + spawnableRoom.Length);
         int pickRoom = spawnableRoom[Random.Range(0, spawnableRoom.Length - 1)];
 
         Transform[] spawnLocations = rooms[pickRoom].spawnLocations;
@@ -330,6 +342,7 @@ public class LevelManager : MonoBehaviour
                         int location = useableLocations[placement];
                         useableLocations.Remove(location);
                         GameObject refence = Instantiate(spawnObjects[spawnLoop], spawnLocations[location].position, Quaternion.identity);
+                        refence.transform.SetParent(spawnPlatform);
                         GridMovement emenyScript = refence.GetComponent<GridMovement>();
                         if (emenyScript != null)
                         {
@@ -340,13 +353,12 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        SpawnPattern PickSpawn()
+        SpawnPattern PickSpawnPattern()
         {
             if (spawnPatterns.Length == 0)
             {
                 return null;
             }
-
             return spawnPatterns[Random.Range(0, spawnPatterns.Length - 1)];
         }
 

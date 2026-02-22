@@ -18,6 +18,7 @@ public class Breakable : MonoBehaviour
 
     public int health = 1;
     int currentHeath;
+    [SerializeField] Sprite destoryedSprite;
     [SerializeField] Sprite damagedSprite;
     private SpriteRenderer spriteRenderer;
     private Sprite fuctionalSprite;
@@ -74,17 +75,17 @@ public class Breakable : MonoBehaviour
             return false;
         }
 
-        Repaired();
-
         if (currentHeath >= health)
         {
             currentHeath = health;
             damage = false;
             broken = false;
+            Repaired();
         }
         else if (currentHeath < health)
         {
             damage = true;
+            Damage();
             if (currentHeath <= 0)
             {
                 currentHeath = 0;
@@ -111,17 +112,25 @@ public class Breakable : MonoBehaviour
             LevelManager.instance.UpdateNavigation();
             broken = true;
 
-            if (damagedSprite != null && spriteRenderer != null)
+            if (destoryedSprite != null && spriteRenderer != null)
             {
-                spriteRenderer.sprite = damagedSprite;
+                spriteRenderer.sprite = destoryedSprite;
             }
+        }
+    }
+    public void Damage()
+    {
+        if (damagedSprite != null && spriteRenderer != null)
+        {
+            spriteRenderer.sprite = damagedSprite;
         }
     }
     public void Repaired()
     {
+        onFixEvent.Invoke(gameObject);
         if (broken)
         {
-            onFixEvent.Invoke(gameObject);
+            
             for (int attranctLoop = 0; attranctLoop < attractants.Count; attranctLoop++)
             {
                 attractants[attranctLoop].SetAttranct();

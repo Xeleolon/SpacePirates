@@ -31,15 +31,15 @@ public class RockEmeny : GridMovement
     public override void Start()
     {
         base.Start();
-        LevelManager.instance.updateTargets += UpdateTarget;
+        //LevelManager.instance.updateTargets += UpdateTarget;
         //AssignTarget(currentRoom);
         //PickMove();
     }
-    private void OnDestroy()
+    /*private void OnDestroy()
     {
-        LevelManager.instance.updateTargets -= UpdateTarget;
+        //LevelManager.instance.updateTargets -= UpdateTarget;
         Debug.Log("removing Subcrition");
-    }
+    }*/
     void Update()
     {
 
@@ -340,7 +340,7 @@ public class RockEmeny : GridMovement
             }
         }
     }
-    private void UpdateTarget()
+    public void UpdateTarget()
     {
         AssignTarget(currentRoom);
     }

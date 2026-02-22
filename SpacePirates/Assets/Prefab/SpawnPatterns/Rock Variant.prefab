@@ -16,6 +16,42 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6980369872792952599, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: health
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980369872792952599, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: damageColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980369872792952599, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: damageColor.b
+      value: 0.009433806
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980369872792952599, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: damageColor.g
+      value: 0.009433806
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980369872792952599, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: damageColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6980369872792952599, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: damageFlashLength
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7481602937765122937, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7481602937765122937, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7481602937765122937, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8036472111401340302, guid: debc3687a40b20744911b7cf9a31aff5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

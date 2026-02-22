@@ -299,11 +299,11 @@ public class LevelUIControl : MonoBehaviour
         }
         if (thrusterPluse != null)
         {
-            if (engineDamage && !thrusterPluse.activeSelf)
+            if (!engineDamage && !thrusterPluse.activeSelf)
             {
                 thrusterPluse.SetActive(true);
             }
-            else if (!engineDamage && thrusterPluse.activeSelf)
+            else if (engineDamage && thrusterPluse.activeSelf)
             {
                 thrusterPluse.SetActive(false);
             }

@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 3
   m_Sprite: {fileID: 7846004945147898138, guid: 399fe66bfa59458468027a16ac95a3a8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7106918, g: 0.504527, b: 0.2793599, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -167,9 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f577912dfc7484eb093ed92f32c513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1
-  damageColor: {r: 0, g: 0, b: 0, a: 0}
-  damageFlashLength: 0
+  health: 2
+  damageColor: {r: 1, g: 0.009433806, b: 0.009433806, a: 1}
+  damageFlashLength: 0.2
 --- !u!114 &5253336708680644032
 MonoBehaviour:
   m_ObjectHideFlags: 0

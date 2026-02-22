@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pattern 2
   m_EditorClassIdentifier: 
   spawnObjects:
-  - {fileID: 1335554919427019447, guid: 52b6bebac7c56bf4f9b0e8d3a2793fb4, type: 3}
   - {fileID: 7236848255147405396, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
-  - {fileID: 7410863657490050409, guid: 73571a93405a63048999989141e164a3, type: 3}
+  - {fileID: 1335554919427019447, guid: 52b6bebac7c56bf4f9b0e8d3a2793fb4, type: 3}
+  - {fileID: 6343970163218587588, guid: afe390e84ba12ac44bb54364874bf291, type: 3}
   numberOfSpawns: 010000000100000002000000

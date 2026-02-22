@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2958378802851702141, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
       propertyPath: m_Color.b
-      value: 0.19154693
+      value: 0.07058824
       objectReference: {fileID: 0}
     - target: {fileID: 2958378802851702141, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
       propertyPath: m_Color.g
-      value: 0.19154693
+      value: 0.94509804
       objectReference: {fileID: 0}
     - target: {fileID: 2958378802851702141, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
       propertyPath: m_Color.r
-      value: 0.93710685
+      value: 0.9882353
       objectReference: {fileID: 0}
     - target: {fileID: 3407975182276423291, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
       propertyPath: m_LocalPosition.x
@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7236848255147405396, guid: 672fd77f71edc3c46b27327527992f01, type: 3}
       propertyPath: m_Name
-      value: Lattern Variant
+      value: Lattern Variant 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -115,7 +115,7 @@ MonoBehaviour:
   targetplace: {fileID: 0}
   targeting: 0
   currentRoom: {fileID: 0}
-  attractedTo: 3
+  attractedTo: 4
   rayCastRange: 1
   damage: 1
   actackRayRange: 1.2

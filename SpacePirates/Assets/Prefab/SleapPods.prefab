@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
+  destoryedSprite: {fileID: 2615674117417162289, guid: 997020c3ed5c7e147a0c8e5abdb01a5d, type: 3}
   damagedSprite: {fileID: 2615674117417162289, guid: 997020c3ed5c7e147a0c8e5abdb01a5d, type: 3}
   attractants:
   - fontName: sleapPods
@@ -160,7 +161,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+        m_MethodName: 
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -172,7 +173,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+        m_MethodName: 
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

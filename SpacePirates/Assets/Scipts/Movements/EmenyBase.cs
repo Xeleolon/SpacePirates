@@ -40,6 +40,7 @@ public class EmenyBase : MonoBehaviour
         health += alter;
         spriteRenderer.color = damageColor;
         damageClock = damageFlashLength;
+        damaging = true;
 
 
         if (health <= 0)

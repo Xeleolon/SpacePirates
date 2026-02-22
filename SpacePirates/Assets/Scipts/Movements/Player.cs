@@ -72,31 +72,45 @@ public class Player : GridMovement
     [SerializeField] ContactFilter2D actackFilter;
     private float actackCloak;
     int curHealth;
+    //[Header("Testing")]
+    //public bool useTestDirection;
+    //public MovementDirection testDirection;
     private void OnDrawGizmos()
     {
         Vector2 area = new Vector2(actackDistance, actackSpread);
         Vector2 areaPoint = new Vector2(transform.position.x, transform.position.y);
+        /*
+        MovementDirection debugDirection = inputDirection;
+
+        if (useTestDirection)
+        {
+            //debugDirection = testDirection;
+        }
+        else
+        {
+            debugDirection = inputDirection;
+        }*/
 
         switch (inputDirection)
         {
             case MovementDirection.up:
                 area = new Vector2(actackSpread, actackDistance);
-                areaPoint = new Vector2(transform.position.x, transform.position.y + actackDistance / 2 + 0.5f);
+                areaPoint = new Vector2(transform.position.x, transform.position.y + (actackDistance / 2 + 0.5f));
                 break;
             case MovementDirection.down:
                 area = new Vector2(actackSpread, actackDistance);
-                areaPoint = new Vector2(transform.position.x, transform.position.y - actackDistance / 2 + 0.5f);
+                areaPoint = new Vector2(transform.position.x, transform.position.y - (actackDistance / 2 + 0.5f));
                 break;
             case MovementDirection.right:
                 area = new Vector2(actackDistance, actackSpread);
-                areaPoint = new Vector2(transform.position.x + actackDistance / 2 + 0.5f, transform.position.y);
+                areaPoint = new Vector2(transform.position.x + (actackDistance / 2 + 0.5f), transform.position.y);
                 break;
             case MovementDirection.left:
                 area = new Vector2(actackDistance, actackSpread);
-                areaPoint = new Vector2(transform.position.x - actackDistance / 2 + 0.5f, transform.position.y);
+                areaPoint = new Vector2(transform.position.x - (actackDistance / 2 + 0.5f), transform.position.y);
                 break;
         }
-        PlayStrikeAnimations();
+        //PlayStrikeAnimations();
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(new Vector3(areaPoint.x, areaPoint.y, transform.position.z), new Vector3(area.x, area.y, 1));
 
@@ -231,6 +245,7 @@ public class Player : GridMovement
     #region WeaponFire
     private void FireInput(InputAction.CallbackContext context)
     {
+        //Debug.Log("Fire Input");
         Actack();
     }
 
@@ -240,7 +255,7 @@ public class Player : GridMovement
         {
             return;
         }
-
+        //Debug.Log("Actack");
 
         Vector2 area = new Vector2(actackDistance, actackSpread);
         Vector2 areaPoint = new Vector2(transform.position.x, transform.position.y);
@@ -249,19 +264,19 @@ public class Player : GridMovement
         {
             case MovementDirection.up:
                 area = new Vector2(actackSpread, actackDistance);
-                areaPoint = new Vector2(transform.position.x, transform.position.y + actackDistance / 2 + 0.5f);
+                areaPoint = new Vector2(transform.position.x, transform.position.y + (actackDistance / 2 + 0.5f));
                 break;
             case MovementDirection.down:
                 area = new Vector2(actackSpread, actackDistance);
-                areaPoint = new Vector2(transform.position.x, transform.position.y - actackDistance / 2 + 0.5f);
+                areaPoint = new Vector2(transform.position.x, transform.position.y - (actackDistance / 2 + 0.5f));
                 break;
             case MovementDirection.right:
                 area = new Vector2(actackDistance, actackSpread);
-                areaPoint = new Vector2(transform.position.x + actackDistance / 2 + 0.5f, transform.position.y);
+                areaPoint = new Vector2(transform.position.x + (actackDistance / 2 + 0.5f), transform.position.y);
                 break;
             case MovementDirection.left:
                 area = new Vector2(actackDistance, actackSpread);
-                areaPoint = new Vector2(transform.position.x - actackDistance / 2 + 0.5f, transform.position.y);
+                areaPoint = new Vector2(transform.position.x - (actackDistance / 2 + 0.5f), transform.position.y);
                 break;
         }
 
@@ -294,6 +309,7 @@ public class Player : GridMovement
                 }
                 else if (breakable != null)
                 {
+                    Debug.Log("repairing");
                     breakable.AlterHealth(damage);
                 }
             }

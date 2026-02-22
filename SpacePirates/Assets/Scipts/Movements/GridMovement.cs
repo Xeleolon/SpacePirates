@@ -192,7 +192,7 @@ public class GridMovement : MonoBehaviour
     #region Animations
     public void PlayStrikeAnimations()
     {
-        Debug.Log("Checking can Play Strike animations");
+        //Debug.Log("Checking can Play Strike animations");
         if (strikeAnimator == null)
         {
             return;
@@ -201,7 +201,7 @@ public class GridMovement : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Play Strike Animation");
+        //Debug.Log("Play Strike Animation");
         switch (inputDirection)
         {
             case MovementDirection.up:
