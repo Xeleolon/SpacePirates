@@ -83,7 +83,7 @@ public class OnCollision : MonoBehaviour
             Debug.Log("collison detected point 3 empty tag");
             passCollsion();
         }
-        else if (other.gameObject.tag == collisionTag)
+        else if (other.tag == collisionTag)
         {
             Debug.Log("collison detected point 3 tag met requipment");
             passCollsion();
@@ -92,7 +92,7 @@ public class OnCollision : MonoBehaviour
 
         void passCollsion()
         {
-            if (other.gameObject.tag != gameObject.tag)
+            if (other.tag != gameObject.tag)
             {
                 lastHit = other;
                 collisionEvent.Invoke(other.gameObject);

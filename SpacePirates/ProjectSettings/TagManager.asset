@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Wall
+  - Emeny
+  - Breakable
   layers:
   - Default
   - TransparentFX
@@ -12,10 +14,10 @@ TagManager:
   - 
   - Water
   - UI
+  - Emeny
+  - DoorWay
   - Player
-  - 
-  - 
-  - 
+  - Breakable
   - 
   - 
   - 
@@ -41,6 +43,15 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Space
+    uniqueID: 2334592843
+    locked: 0
+  - name: Walls
+    uniqueID: 1596154239
+    locked: 0
+  - name: Emenies
+    uniqueID: 319077419
     locked: 0
   m_RenderingLayers:
   - Default
