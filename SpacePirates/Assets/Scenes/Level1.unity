@@ -5987,6 +5987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -7996,6 +7997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -8436,6 +8438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -13909,6 +13912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 9010822283853125296, guid: 997020c3ed5c7e147a0c8e5abdb01a5d, type: 3}
   damagedSprite: {fileID: 9010822283853125296, guid: 997020c3ed5c7e147a0c8e5abdb01a5d, type: 3}
   attractants:
@@ -17759,6 +17763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -18150,6 +18155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -20308,6 +20314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -20595,6 +20602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  reboutFalueChance: 0
   destoryedSprite: {fileID: 0}
   damagedSprite: {fileID: 0}
   attractants:
@@ -21887,6 +21895,10 @@ PrefabInstance:
       propertyPath: destoryedSprite
       value: 
       objectReference: {fileID: 1364751671282447211, guid: 997020c3ed5c7e147a0c8e5abdb01a5d, type: 3}
+    - target: {fileID: 6697044570542471742, guid: 6fbf2a7bb4212e64b8b781bda1325f0e, type: 3}
+      propertyPath: reboutFalueChance
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6697044570542471742, guid: 6fbf2a7bb4212e64b8b781bda1325f0e, type: 3}
       propertyPath: onFixEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

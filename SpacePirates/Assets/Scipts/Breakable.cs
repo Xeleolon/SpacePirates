@@ -18,6 +18,9 @@ public class Breakable : MonoBehaviour
 
     public int health = 1;
     int currentHeath;
+    [Tooltip("control variable for the like hood of reboting need an extra hit")]
+    [Range (0,1)]
+    [SerializeField] float reboutFalueChance = 0;
     [SerializeField] Sprite destoryedSprite;
     [SerializeField] Sprite damagedSprite;
     private SpriteRenderer spriteRenderer;
@@ -54,8 +57,10 @@ public class Breakable : MonoBehaviour
                 attractants[i].SetAttranct();
             }
         }
+        spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
+            
             fuctionalSprite = spriteRenderer.sprite;
         }
         currentHeath = health;
@@ -64,6 +69,8 @@ public class Breakable : MonoBehaviour
     {
         currentRoom = newRoom;
     }
+
+    private int extraDamage = 0; // variable in charge of potional ship needing a few more hits to activate
     
     public bool AlterHealth(int alter)
     {
@@ -71,6 +78,7 @@ public class Breakable : MonoBehaviour
         LevelUIControl.instance.RoomDamage(currentRoom, alter);
         if (currentHeath <= 0)
         {
+            currentHeath = extraDamage;
             Broken();
             return false;
         }
@@ -78,23 +86,15 @@ public class Breakable : MonoBehaviour
         if (currentHeath >= health)
         {
             currentHeath = health;
-            damage = false;
-            broken = false;
+            //damage = false;
+            //broken = false;
             Repaired();
         }
         else if (currentHeath < health)
         {
-            damage = true;
+            
             Damage();
-            if (currentHeath <= 0)
-            {
-                currentHeath = 0;
-                broken = true;
-            }
-            else
-            {
-                broken = false;
-            }
+            
         }
         return true;
     }
@@ -110,7 +110,7 @@ public class Breakable : MonoBehaviour
                 attractants[attranctLoop].value = 0;
             }
             LevelManager.instance.UpdateNavigation();
-            broken = true;
+        
 
             if (destoryedSprite != null && spriteRenderer != null)
             {
@@ -120,6 +120,17 @@ public class Breakable : MonoBehaviour
     }
     public void Damage()
     {
+        damage = true;
+        if (currentHeath <= 0)
+        {
+            currentHeath = 0;
+            broken = true;
+        }
+        else
+        {
+            broken = false;
+        }
+
         if (damagedSprite != null && spriteRenderer != null)
         {
             spriteRenderer.sprite = damagedSprite;
@@ -127,10 +138,10 @@ public class Breakable : MonoBehaviour
     }
     public void Repaired()
     {
-        onFixEvent.Invoke(gameObject);
-        if (broken)
+        Debug.Log("attemping repair for " + gameObject.name);
+        if (broken || damage)
         {
-            
+            onFixEvent.Invoke(gameObject);
             for (int attranctLoop = 0; attranctLoop < attractants.Count; attranctLoop++)
             {
                 attractants[attranctLoop].SetAttranct();
@@ -139,9 +150,20 @@ public class Breakable : MonoBehaviour
 
             if (fuctionalSprite != null)
             {
+                Debug.Log(gameObject.name + "activating it repair icon");
                 spriteRenderer.sprite = fuctionalSprite;
             }
             broken = false;
+            damage = false;
+
+            if (Random.Range(0, 1) < reboutFalueChance) //cause rebot falue
+            {
+                extraDamage = 0;
+            }
+            else
+            {
+                extraDamage = -1;
+            }
         }
     }
 

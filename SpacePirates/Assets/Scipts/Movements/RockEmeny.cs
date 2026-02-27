@@ -149,10 +149,10 @@ public class RockEmeny : GridMovement
         PlayStrikeAnimations();
         Vector2 temp = RayDirection();
         RaycastHit2D actackHit = Physics2D.Raycast(transform.position, temp, rayCastRange, nullAvoidance);
-        Debug.Log(gameObject.name + " has hit " + actackHit.transform + " actack mode = " + actacking + " direction of actack " + temp);
+        //Debug.Log(gameObject.name + " has hit " + actackHit.transform + " actack mode = " + actacking + " direction of actack " + temp);
         if (actackHit.transform == null)
         {
-            Debug.Log(gameObject.name + " has hit nothign");
+            //Debug.Log(gameObject.name + " has hit nothign");
         }
         else if (actackHit.transform.gameObject.tag == "Player")
         {
@@ -179,7 +179,7 @@ public class RockEmeny : GridMovement
             {
                 actacking = ActackType.none;
             }
-            Debug.Log("Actacking " + actackHit.transform.gameObject.name);
+            //Debug.Log("Actacking " + actackHit.transform.gameObject.name);
 
             actackClock = actackFrequence;
         }
